@@ -1,0 +1,714 @@
+[
+  {
+    "id": "dovec_querencia",
+    "developer_id": "dovec",
+    "developer_name": "Döveç Group",
+    "name": "Querencia Luxury Resort",
+    "region": "İskele / Long Beach",
+    "type": "Флагманский ультрароскошный курорт (4 блока, 705 резиденций)",
+    "price_from": "£135,000",
+    "features": [
+      "Самый амбициозный проект на первой линии Long Beach",
+      "Инфинити-бассейн на крыше 28 этажа с панорамой 360°",
+      "Отельный сервис 5*, SPA-центр и гастрономический ресторан"
+    ],
+    "coords": [
+      35.2895,
+      33.9142
+    ],
+    "image": "https://www.dovecgroup.com/_next/image?url=%2Fimages%2Fprojects%2Fquerencia-exterior-1.jpg&w=1920&q=75&dpl=dpl_D3YCDwBKLWdLr5aYBQ4icHMUZD2r"
+  },
+  {
+    "id": "dovec_courtyard_platinum",
+    "developer_id": "dovec",
+    "developer_name": "Döveç Group",
+    "name": "Courtyard Platinum",
+    "region": "İskele / Boğaz",
+    "type": "Курортный резорт с аквапарком (952 апартамента)",
+    "price_from": "£95,000",
+    "features": [
+      "Отельный сервис и круглогодичная курортная инфраструктура",
+      "Огромный лагунный бассейн 1 500 м² и аквапарк",
+      "Детский клуб, аквазона и крытый подогреваемый бассейн"
+    ],
+    "coords": [
+      35.312,
+      33.931
+    ],
+    "image": "https://www.dovecgroup.com/_next/image?url=%2Fimages%2Fprojects%2Fcourtyard-exterior-2.jpg&w=1920&q=75&dpl=dpl_D3YCDwBKLWdLr5aYBQ4icHMUZD2r"
+  },
+  {
+    "id": "dovec_la_isla",
+    "developer_id": "dovec",
+    "developer_name": "Döveç Group",
+    "name": "La Isla",
+    "region": "İskele / Long Beach",
+    "type": "Эко-курорт с ландшафтным парком и виллами",
+    "price_from": "£115,000",
+    "features": [
+      "Пешая доступность до золотого песчаного пляжа",
+      "Зелёная концепция, экологичные материалы и солнечная генерация",
+      "Бассейн-оазис, лаунж-бары и современный фитнес-центр"
+    ],
+    "coords": [
+      35.282,
+      33.908
+    ],
+    "image": "https://www.dovecgroup.com/_next/image?url=%2Fimages%2Fprojects%2Fla-isla-exterior-1.jpg&w=1920&q=75&dpl=dpl_D3YCDwBKLWdLr5aYBQ4icHMUZD2r"
+  },
+  {
+    "id": "dovec_natulux",
+    "developer_id": "dovec",
+    "developer_name": "Döveç Group",
+    "name": "Natulux",
+    "region": "Tatlısu / Küçük Erenköy",
+    "type": "Премиальный резорт на морском клифе (97 юнитов)",
+    "price_from": "£130,000",
+    "features": [
+      "Уникальное расположение на морском скалистом мысе",
+      "Панорамный инфинити-бассейн на самом краю скалы",
+      "Премиальная отделка натуральным камнем и деревом"
+    ],
+    "coords": [
+      35.385,
+      33.725
+    ],
+    "image": "https://www.dovecgroup.com/_next/image?url=%2Fimages%2Fprojects%2Fnatulux-exterior-1.jpg&w=1920&q=75&dpl=dpl_D3YCDwBKLWdLr5aYBQ4icHMUZD2r"
+  },
+  {
+    "id": "dovec_la_casalia",
+    "developer_id": "dovec",
+    "developer_name": "Döveç Group",
+    "name": "La Casalia",
+    "region": "Tatlısu Coast",
+    "type": "Велнес-курорт с оздоровительной клиникой (454 резиденции)",
+    "price_from": "£120,000",
+    "features": [
+      "Европейская клиника детокса и долголетия",
+      "Первая береговая линия с песчаной бухтой",
+      "Органические сады и ресторан фермерской кухни"
+    ],
+    "coords": [
+      35.391,
+      33.748
+    ],
+    "image": "https://www.dovecgroup.com/_next/image?url=%2Fimages%2Fprojects%2Fla-casalia-villa-exterior.webp&w=1920&q=75&dpl=dpl_D3YCDwBKLWdLr5aYBQ4icHMUZD2r"
+  },
+  {
+    "id": "dovec_d_point",
+    "developer_id": "dovec",
+    "developer_name": "Döveç Group",
+    "name": "D-Point",
+    "region": "İskele / Long Beach",
+    "type": "Инновационный деловой и жилой комплекс",
+    "price_from": "£110,000",
+    "features": [
+      "Главный новый бизнес-хаб региона Лонг-Бич",
+      "Брендовые офисы, апартаменты и бутики с выходом на проспект",
+      "Высокая круглогодичная арендная ликвидность"
+    ],
+    "coords": [
+      35.2845,
+      33.904
+    ],
+    "image": "https://www.dovecgroup.com/_next/image?url=%2Fimages%2Fprojects%2Fd-point-exterior-1.jpg&w=1920&q=75&dpl=dpl_D3YCDwBKLWdLr5aYBQ4icHMUZD2r"
+  },
+  {
+    "id": "nl_grand_sapphire",
+    "developer_id": "northernland",
+    "developer_name": "NorthernLAND",
+    "name": "Grand Sapphire Resort & Residences",
+    "region": "İskele / Long Beach",
+    "type": "Мега-резорт 7 звёзд с отелем и казино",
+    "price_from": "£130,000",
+    "features": [
+      "Самый масштабный гостиничный проект острова",
+      "Огромный лагунный бассейн Punta Cana 4 000 м²",
+      "Собственный отель 5*, казино и 10 ресторанов"
+    ],
+    "coords": [
+      35.295,
+      33.905
+    ],
+    "image": "https://northernland.com/storage/page/12/grand-sapphire-resort-and-residences.jpg"
+  },
+  {
+    "id": "nl_grand_sapphire_blu",
+    "developer_id": "northernland",
+    "developer_name": "NorthernLAND",
+    "name": "Grand Sapphire BLU",
+    "region": "İskele / Long Beach",
+    "type": "Новая премиальная высотная башня у моря",
+    "price_from": "£145,000",
+    "features": [
+      "Новая жемчужина экосистемы Grand Sapphire Resort",
+      "Панорамные виды на Средиземное море из каждой квартиры",
+      "Прямой доступ ко всей инфраструктуре курорта 7 звёзд"
+    ],
+    "coords": [
+      35.297,
+      33.907
+    ],
+    "image": "https://northernland.com/storage/page/34/grand-sapphire-blu.webp"
+  },
+  {
+    "id": "nl_casa_del_mare",
+    "developer_id": "northernland",
+    "developer_name": "NorthernLAND",
+    "name": "Casa Del Mare",
+    "region": "Tatlısu / Esentepe Coast",
+    "type": "Премиальные виллы и пентхаусы у моря",
+    "price_from": "£110,000",
+    "features": [
+      "Первая береговая линия и собственный пляжный клуб",
+      "Каскадные лагунные бассейны с песчаным входом",
+      "Панорамные закатные террасы с видом на залив"
+    ],
+    "coords": [
+      35.372,
+      33.712
+    ],
+    "image": "https://northernland.com/storage/page/32/casa-del-mare.webp"
+  },
+  {
+    "id": "nl_emerald_villas",
+    "developer_id": "northernland",
+    "developer_name": "NorthernLAND",
+    "name": "Emerald Villas Yeni Boğaziçi",
+    "region": "Yeni Boğaziçi / Famagusta",
+    "type": "Комплекс приватных вилл премиум-класса",
+    "price_from": "£240,000",
+    "features": [
+      "Обособленный поселок вилл в 5 минутах от античного Саламиса",
+      "Собственные участки с личными бассейнами и ландшафтным садом",
+      "Близость к международной британской школе Near East College"
+    ],
+    "coords": [
+      35.215,
+      33.91
+    ],
+    "image": "https://northernland.com/storage/header/32/emerald-villas-yeni-bogazici.webp"
+  },
+  {
+    "id": "nl_villas_esentepe",
+    "developer_id": "northernland",
+    "developer_name": "NorthernLAND",
+    "name": "NorthernLAND Villas Esentepe",
+    "region": "Esentepe Coast",
+    "type": "Панорамные средиземноморские виллы",
+    "price_from": "£280,000",
+    "features": [
+      "Уединенная локация на холме с панорамой 180° на море и горы",
+      "В нескольких минутах от престижного гольф-клуба Korineum",
+      "Современная хай-тек архитектура с бассейнами инфинити"
+    ],
+    "coords": [
+      35.356,
+      33.582
+    ],
+    "image": "https://northernland.com/storage/header/74/northernland-villas-esentepe.webp"
+  },
+  {
+    "id": "nl_villas_alsancak",
+    "developer_id": "northernland",
+    "developer_name": "NorthernLAND",
+    "name": "NorthernLAND Villas Alsancak",
+    "region": "Alsancak / West Kyrenia",
+    "type": "Элитные виллы в предгорье Кирении",
+    "price_from": "£320,000",
+    "features": [
+      "Престижный район рядом с отелями Merit 5* и английскими школами",
+      "Чистый горный воздух и потрясающие виды на море",
+      "Премиальные натуральные материалы и система Smart Home"
+    ],
+    "coords": [
+      35.348,
+      33.22
+    ],
+    "image": "https://northernland.com/storage/header/66/northernland-villas-alsancak.webp"
+  },
+  {
+    "id": "oz_solea",
+    "developer_id": "ozyalcin",
+    "developer_name": "Özyalçın Construction",
+    "name": "SOLEA by Özyalçın",
+    "region": "Girne / Bellapais",
+    "type": "Эксклюзивные авторские виллы у аббатства Беллапаис",
+    "price_from": "£420,000",
+    "features": [
+      "Самая статусная предгорная локация Северного Кипра",
+      "Панорамный вид на историческую Кирению и море",
+      "Индивидуальные бассейны, камины и участки до 800 м²"
+    ],
+    "coords": [
+      35.315,
+      33.355
+    ],
+    "image": "https://ozyalcinconstruction.com/wp-content/uploads/2024/02/Solea-Dis-gorseller-15.webp"
+  },
+  {
+    "id": "oz_casa_oliva_2",
+    "developer_id": "ozyalcin",
+    "developer_name": "Özyalçın Construction",
+    "name": "Casa Oliva 2 by Özyalçın",
+    "region": "Girne / Zeytinlik",
+    "type": "Премиальные резиденции среди вековых оливковых рощ",
+    "price_from": "£185,000",
+    "features": [
+      "Экологически чистый заповедный район Зейтинлик",
+      "5 минут до центра Кирении и гавани",
+      "Общий бассейн инфинити, ландшафтные сады и подземный паркинг"
+    ],
+    "coords": [
+      35.331,
+      33.298
+    ],
+    "image": "https://ozyalcinconstruction.com/wp-content/uploads/2025/07/Tip-C-3.jpg"
+  },
+  {
+    "id": "oz_zenith",
+    "developer_id": "ozyalcin",
+    "developer_name": "Özyalçın Construction",
+    "name": "ZENITH by Özyalçın",
+    "region": "Girne City Center",
+    "type": "Премиальный жилой и деловой комплекс в центре Кирении",
+    "price_from": "£165,000",
+    "features": [
+      "Престижная городская локация с пешей доступностью до набережной",
+      "Консьерж-сервис 24/7, бутики и коворкинг на первом этаже",
+      "Высокая доходность от долгосрочной и посуточной аренды"
+    ],
+    "coords": [
+      35.337,
+      33.318
+    ],
+    "image": "https://ozyalcinconstruction.com/wp-content/uploads/2025/05/1905x800.jpg"
+  },
+  {
+    "id": "carr_sea_magic_deluxe",
+    "developer_id": "carrington",
+    "developer_name": "Carrington Group",
+    "name": "Sea Magic Deluxe",
+    "region": "Esentepe / Tatlısu Coast",
+    "type": "Роскошные апартаменты и виллы на первой линии моря",
+    "price_from": "£145,000",
+    "features": [
+      "Первая береговая линия с прямым спуском к морю",
+      "Инфинити-бассейн с видом на бирюзовую бухту",
+      "Премиальная отделка, система «Умный дом» и консьерж-сервис"
+    ],
+    "coords": [
+      35.3437,
+      33.5367
+    ],
+    "image": "https://cdn.carringtoncyprus.com/wp-content/uploads/2026/02/Design-sans-titre-119.png"
+  },
+  {
+    "id": "carr_sea_magic_garden",
+    "developer_id": "carrington",
+    "developer_name": "Carrington Group",
+    "name": "Sea Magic Garden",
+    "region": "Esentepe Coast",
+    "type": "Инвестиционные апартаменты и лофты с видом на море",
+    "price_from": "£199,950",
+    "features": [
+      "110 курортных юнитов: гарден-апартаменты и двухуровневые лофт-пентхаусы",
+      "Панорамный вид на Средиземное море и горную гряду Бешпармак",
+      "Каскадные бассейны, спа-комплекс и высокий арендный доход"
+    ],
+    "coords": [
+      35.3394,
+      33.5334
+    ],
+    "image": "https://cdn.carringtoncyprus.com/wp-content/uploads/2026/02/5-scaled.jpg"
+  },
+  {
+    "id": "carr_malibu_zone_5",
+    "developer_id": "carrington",
+    "developer_name": "Carrington Group",
+    "name": "Malibu Zone 5",
+    "region": "Esentepe Coast",
+    "type": "Современные курортные апартаменты рядом с морем",
+    "price_from": "£155,000",
+    "features": [
+      "Шаговая доступность до благоустроенного пляжа",
+      "Лагунные открытые бассейны и ландшафтные тропические сады",
+      "Выгодные условия беспроцентной рассрочки от Carrington"
+    ],
+    "coords": [
+      35.352,
+      33.625
+    ],
+    "image": "https://cdn.carringtoncyprus.com/wp-content/uploads/2026/02/Design-sans-titre-117.png"
+  },
+  {
+    "id": "carr_park_avenue",
+    "developer_id": "carrington",
+    "developer_name": "Carrington Group",
+    "name": "Park Avenue",
+    "region": "Esentepe",
+    "type": "Апартаменты с 2 и 3 спальнями в 850 метрах от моря",
+    "price_from": "£139,000",
+    "features": [
+      "Просторные семейные планировки с террасами",
+      "Закрытый охраняемый комплекс с парковой инфраструктурой",
+      "Тренажерный зал, сауна и детский городок"
+    ],
+    "coords": [
+      35.348,
+      33.61
+    ],
+    "image": "https://cdn.carringtoncyprus.com/wp-content/uploads/2026/02/Design-sans-titre-114.png"
+  },
+  {
+    "id": "carr_atlantis_pearl",
+    "developer_id": "carrington",
+    "developer_name": "Carrington Group",
+    "name": "Atlantis Pearl",
+    "region": "Tatlısu / Küçük Erenköy",
+    "type": "Апартаменты с видом на море в 450 метрах от пляжа",
+    "price_from": "£129,000",
+    "features": [
+      "Панорамный вид на морские гроты и дикие бухты",
+      "Собственный пляжный клуб и рестораны в шаговой доступности",
+      "Идеальный баланс тишины, природы и курортного сервиса"
+    ],
+    "coords": [
+      35.378,
+      33.695
+    ],
+    "image": "https://cdn.carringtoncyprus.com/wp-content/uploads/2026/02/Design-sans-titre-115.png"
+  },
+  {
+    "id": "carr_pine_hills",
+    "developer_id": "carrington",
+    "developer_name": "Carrington Group",
+    "name": "Pine Hills Residence",
+    "region": "Esentepe Hills",
+    "type": "Спокойная жизнь на холмах с видом на Средиземное море",
+    "price_from": "£165,000",
+    "features": [
+      "Уединенная локация в окружении реликтовых сосновых рощ",
+      "Круговой панорамный обзор морского побережья",
+      "Приватная клубная атмосфера и чистейший горный воздух"
+    ],
+    "coords": [
+      35.335,
+      33.56
+    ],
+    "image": "https://cdn.carringtoncyprus.com/wp-content/uploads/2026/02/pine-hill-residence.jpg"
+  },
+  {
+    "id": "carr_lagoon",
+    "developer_id": "carrington",
+    "developer_name": "Carrington Group",
+    "name": "Lagoon",
+    "region": "Esentepe Coast",
+    "type": "Двухуровневые апартаменты на первой линии моря",
+    "price_from": "£175,000",
+    "features": [
+      "Первая линия с прямым спуском к воде и естественной лагуне",
+      "Двусветные гостиные и видовые террасы на крышах",
+      "Пешеходные дорожки к ресторанам и пляжным барам"
+    ],
+    "coords": [
+      35.356,
+      33.635
+    ],
+    "image": "https://cdn.carringtoncyprus.com/wp-content/uploads/2026/02/Design-sans-titre-115-1.png"
+  },
+  {
+    "id": "carr_malibu_zone_6",
+    "developer_id": "carrington",
+    "developer_name": "Carrington Group",
+    "name": "Malibu Zone 6",
+    "region": "Bahçeli / Esentepe Coast",
+    "type": "Прибрежные апартаменты с долгосрочным инвестиционным потенциалом",
+    "price_from": "£169,950",
+    "features": [
+      "Инвестиционная локация рядом с будущей мариной",
+      "Стильная калифорнийская малоэтажная архитектура",
+      "Бассейны с пляжной кромкой и шезлонгами в воде"
+    ],
+    "coords": [
+      35.3642,
+      33.6785
+    ],
+    "image": "https://cdn.carringtoncyprus.com/wp-content/uploads/2026/02/Design-sans-titre-128.png"
+  },
+  {
+    "id": "noy_ocean_life",
+    "developer_id": "noyanlar",
+    "developer_name": "Noyanlar Group",
+    "name": "Ocean Life Residence",
+    "region": "İskele / Long Beach",
+    "type": "Курортный комплекс у моря в стиле античного Саламиса (21 блок)",
+    "price_from": "£89,000",
+    "features": [
+      "21 блок, видовые апартаменты и роскошные террасы",
+      "Огромные лагунные бассейны, аквапарк и спа-центр",
+      "5 минут пешком до золотых песков Long Beach"
+    ],
+    "coords": [
+      35.286,
+      33.902
+    ],
+    "image": "https://noyanlar.com/wp-content/uploads/2026/05/Ocean-Life-27.jpg",
+    "url": "https://noyanlar.com/projects/ocean-life-residence/"
+  },
+  {
+    "id": "noy_olea",
+    "developer_id": "noyanlar",
+    "developer_name": "Noyanlar Group",
+    "name": "Olea Residence",
+    "region": "Geçitkale / Gazimağusa",
+    "type": "Эко-резиденция среди оливковых рощ с развитой инфраструктурой",
+    "price_from": "£75,000",
+    "features": [
+      "Спокойная загородная жизнь в окружении реликтовых олив",
+      "Высокий арендный и инвестиционный потенциал района Гечиткале",
+      "Современная эко-инфраструктура, бассейны и зоны отдыха"
+    ],
+    "coords": [
+      35.26,
+      33.748
+    ],
+    "image": "https://noyanlar.com/wp-content/uploads/2026/08/olea_exterior.jpg",
+    "url": "https://noyanlar.com/projects/olea-residence/"
+  },
+  {
+    "id": "noy_sea_breeze",
+    "developer_id": "noyanlar",
+    "developer_name": "Noyanlar Group",
+    "name": "Sea Breeze",
+    "region": "İskele / Long Beach",
+    "type": "Прибрежный жилой комплекс повышенного комфорта у моря",
+    "price_from": "£84,000",
+    "features": [
+      "Непосредственная близость к морскому побережью Long Beach",
+      "Панорамное остекление, просторные балконы и террасы",
+      "Развитая внутренняя инфраструктура и ландшафтные сады"
+    ],
+    "coords": [
+      35.289,
+      33.907
+    ],
+    "image": "https://noyanlar.com/wp-content/uploads/2026/08/sea_breeze_exterior.jpg",
+    "url": "https://noyanlar.com/projects/sea_breeze/"
+  },
+  {
+    "id": "noy_the_blue",
+    "developer_id": "noyanlar",
+    "developer_name": "Noyanlar Group",
+    "name": "The Blue Residence",
+    "region": "İskele Merkez",
+    "type": "Городской курортный комплекс апартаментов в центре Искеле",
+    "price_from": "£78,000",
+    "features": [
+      "Шаговая доступность набережной и всей городской инфраструктуры",
+      "Закрытая охраняемая территория с бассейном и зонами отдыха",
+      "Идеальный баланс курортного проживания и круглогодичной жизни"
+    ],
+    "coords": [
+      35.285,
+      33.898
+    ],
+    "image": "https://noyanlar.com/wp-content/uploads/2026/09/blue_exterior-2.jpg",
+    "url": "https://noyanlar.com/projects/the_blue_residence/"
+  },
+  {
+    "id": "noy_four_seasons_3",
+    "developer_id": "noyanlar",
+    "developer_name": "Noyanlar Group",
+    "name": "Four Seasons Life III",
+    "region": "İskele / Boğaz",
+    "type": "Морской курортный резорт премиум-класса с приватным пляжем",
+    "price_from": "£125,000",
+    "features": [
+      "Первая береговая линия со своим приватным песчаным пляжем",
+      "Пляжные клубы, рестораны на набережной и водные виды спорта",
+      "Премиальная отделка и видовые террасы на залив Боаз"
+    ],
+    "coords": [
+      35.318,
+      33.939
+    ],
+    "image": "https://noyanlar.com/wp-content/uploads/2026/08/four_seasons_exterior.jpg",
+    "url": "https://noyanlar.com/projects/four_seasons_3/"
+  },
+  {
+    "id": "noy_la_palazzo",
+    "developer_id": "noyanlar",
+    "developer_name": "Noyanlar Group",
+    "name": "La Palazzo",
+    "region": "İskele / Boğaz",
+    "type": "Дворцовые приватные виллы неоклассической архитектуры",
+    "price_from": "£380,000",
+    "features": [
+      "Эксклюзивные отдельно стоящие виллы с личными бассейнами",
+      "Итальянский мрамор, высокие потолки и приватные сады",
+      "Закрытый клубный поселок для респектабельной приватной жизни"
+    ],
+    "coords": [
+      35.281,
+      33.905
+    ],
+    "image": "https://noyanlar.com/wp-content/uploads/2026/05/la_plazzo-1.jpeg",
+    "url": "https://noyanlar.com/projects/la_palazzo/"
+  },
+  {
+    "id": "noy_solmaris",
+    "developer_id": "noyanlar",
+    "developer_name": "Noyanlar Group",
+    "name": "Solmaris",
+    "region": "İskele / Boğaz",
+    "type": "Современный жилой комплекс по соседству с мариной Боаз",
+    "price_from": "£110,000",
+    "features": [
+      "Соседство с живописной гаванью яхт и рыбными ресторанами",
+      "Ландшафтный дизайн, зоны барбекю и открытые релакс-бассейны",
+      "Гармония лазурного моря и нетронутой природы Средиземноморья"
+    ],
+    "coords": [
+      35.314,
+      33.932
+    ],
+    "image": "https://noyanlar.com/wp-content/uploads/2026/08/solmaris_exterior.jpg",
+    "url": "https://noyanlar.com/projects/solmaris/"
+  },
+  {
+    "id": "noy_sky_diora",
+    "developer_id": "noyanlar",
+    "developer_name": "Noyanlar Group",
+    "name": "Sky Diora",
+    "region": "Karpaz / Yeni Erenköy",
+    "type": "Бутик-резиденция с панорамой моря рядом с Karpaz Gate Marina",
+    "price_from": "£95,000",
+    "features": [
+      "Экологически чистый заповедный полуостров Карпас",
+      "В считанных минутах от международной яхтенной марины Karpaz Gate",
+      "Панорамный вид на море, чистейшие дикие пляжи и приватность"
+    ],
+    "coords": [
+      35.535,
+      34.195
+    ],
+    "image": "https://noyanlar.com/wp-content/uploads/2026/08/sky_diora_exterior.jpg",
+    "url": "https://noyanlar.com/projects/sky_diora/"
+  },
+  {
+    "id": "noy_terra_life",
+    "developer_id": "noyanlar",
+    "developer_name": "Noyanlar Group",
+    "name": "Terra Life",
+    "region": "İskele / Long Beach",
+    "type": "Эко-комплекс с приватными патио и садами у побережья",
+    "price_from": "£82,000",
+    "features": [
+      "Отличная транспортная доступность, близость к морю и набережной",
+      "Зеленая парковая территория, открытые бассейны и спортивные зоны",
+      "Высокая ликвидность для долгосрочной и сезонной курортной аренды"
+    ],
+    "coords": [
+      35.287,
+      33.903
+    ],
+    "image": "https://noyanlar.com/wp-content/uploads/2026/08/Kapak.jpg",
+    "url": "https://noyanlar.com/projects/terra_life/"
+  },
+  {
+    "id": "cc_bahamas",
+    "developer_id": "cyprus_constructions",
+    "developer_name": "Cyprus Constructions",
+    "name": "Bahamas Homes",
+    "region": "Bahçeli / Esentepe Coast",
+    "type": "Экзотический курорт с тропическими лагунами",
+    "price_from": "£94,950",
+    "features": [
+      "Масштабный прибрежный курорт в багамском стиле",
+      "Каскады лагунных бассейнов с песчаными пляжами и пальмами",
+      "Ресторан высокой кухни, SPA-центр и крытый подогреваемый бассейн"
+    ],
+    "coords": [
+      35.368,
+      33.665
+    ],
+    "image": "https://www.cyprusconstructions.com/Compress/bahamas.webp"
+  },
+  {
+    "id": "cc_hawaii",
+    "developer_id": "cyprus_constructions",
+    "developer_name": "Cyprus Constructions",
+    "name": "Hawaii Homes",
+    "region": "Tatlısu / Esentepe Coast",
+    "type": "Премиальный прибрежный резорт с искусственной рекой",
+    "price_from": "£165,000",
+    "features": [
+      "Первая береговая линия с собственным оборудованным пляжем",
+      "Уникальный бассейн с искусственной рекой и водопадами",
+      "Круглогодичный подогреваемый крытый бассейн и велнес-зона"
+    ],
+    "coords": [
+      35.375,
+      33.682
+    ],
+    "image": "https://www.cyprusconstructions.com/Compress/hawai.webp"
+  },
+  {
+    "id": "cc_aloha",
+    "developer_id": "cyprus_constructions",
+    "developer_name": "Cyprus Constructions",
+    "name": "Aloha Homes",
+    "region": "Esentepe / Bahçeli",
+    "type": "Тропический курортный поселок с лагунами",
+    "price_from": "£191,025",
+    "features": [
+      "Концепция островной жизни с ландшафтными садами",
+      "Пешая доступность до уединенных морских бухт",
+      "Панорамный инфинити-бассейн и ресторан авторской кухни"
+    ],
+    "coords": [
+      35.364,
+      33.652
+    ],
+    "image": "https://www.cyprusconstructions.com/PlanTypeCovers/Aloha.jpg"
+  },
+  {
+    "id": "cc_phuket",
+    "developer_id": "cyprus_constructions",
+    "developer_name": "Cyprus Constructions",
+    "name": "Phuket Health & Wellness Resort",
+    "region": "Bahçeli / Esentepe",
+    "type": "Оздоровительный спа-курорт холистической медицины",
+    "price_from": "£175,000",
+    "features": [
+      "Центр восточной медицины, аюрведы и детокс-программ",
+      "Панорамный вид на море в окружении нетронутой природы",
+      "Криосауна, соляные комнаты и ресторан органической кухни"
+    ],
+    "coords": [
+      35.365,
+      33.655
+    ],
+    "image": "https://www.cyprusconstructions.com/Compress/phuket.webp"
+  },
+  {
+    "id": "cc_edremit",
+    "developer_id": "cyprus_constructions",
+    "developer_name": "Cyprus Constructions",
+    "name": "Edremit Villas",
+    "region": "Edremit / West Kyrenia",
+    "type": "Элитные предгорные виллы ультра-люкс",
+    "price_from": "£550,000",
+    "features": [
+      "Самая престижная локация на склонах Эдремита над Киренией",
+      "Захватывающий вид на море и старинный порт с высоты птичьего полета",
+      "Индивидуальные инфинити-бассейны, система Smart Home и приватность"
+    ],
+    "coords": [
+      35.332,
+      33.275
+    ],
+    "image": "https://www.cyprusconstructions.com/heroPic/Edremit/EDREMIT.webp"
+  }
+]

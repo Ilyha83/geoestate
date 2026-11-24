@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoEstate Intelligence — AI Benchmark рынка недвижимости</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            surface: { 950: '#07090E', 900: '#0C101A', 800: '#111827', 700: '#1A2035', 600: '#232D45' },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; background: #07090E; }
+
+    /* Aurora Mesh Background */
+    .aurora-bg {
+      position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
+    }
+    .aurora-bg::before {
+      content: ''; position: absolute; width: 900px; height: 900px; top: -250px; left: -150px;
+      background: radial-gradient(ellipse, rgba(56,189,248,0.07) 0%, transparent 70%);
+      animation: drift 25s ease-in-out infinite alternate;
+    }
+    .aurora-bg::after {
+      content: ''; position: absolute; width: 700px; height: 700px; bottom: -150px; right: -150px;
+      background: radial-gradient(ellipse, rgba(139,92,246,0.06) 0%, transparent 70%);
+      animation: drift 30s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes drift { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(80px,40px) scale(1.15); } }
+
+    /* Third aurora orb */
+    .aurora-orb3 {
+      position: absolute; width: 500px; height: 500px; top: 40%; left: 50%;
+      background: radial-gradient(ellipse, rgba(16,185,129,0.04) 0%, transparent 70%);
+      animation: drift 35s ease-in-out infinite alternate; pointer-events: none;
+    }
+
+    /* Bento Glass Panel */
+    .bento {
+      background: linear-gradient(135deg, rgba(17,24,39,0.92) 0%, rgba(12,16,26,0.96) 100%);
+      backdrop-filter: blur(24px) saturate(1.4);
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 0 0 0.5px rgba(0,0,0,0.6), 0 20px 60px -15px rgba(0,0,0,0.5);
+    }
+    .bento-sm { background: rgba(17,24,39,0.7); border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(12px); }
+
+    /* Gradient Text */
+    .grad-text { background: linear-gradient(135deg, #38BDF8 0%, #818CF8 50%, #E879F9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* Grade Badges */
+    .grade-aaa { background: linear-gradient(135deg, #059669, #10B981); box-shadow: 0 0 20px rgba(16,185,129,0.25); }
+    .grade-aa  { background: linear-gradient(135deg, #0D9488, #2DD4BF); box-shadow: 0 0 15px rgba(45,212,191,0.2); }
+    .grade-a   { background: linear-gradient(135deg, #0284C7, #38BDF8); box-shadow: 0 0 15px rgba(56,189,248,0.2); }
+    .grade-bbb { background: linear-gradient(135deg, #D97706, #FBBF24); box-shadow: 0 0 15px rgba(251,191,36,0.2); }
+    .grade-bb  { background: linear-gradient(135deg, #EA580C, #FB923C); box-shadow: 0 0 15px rgba(251,146,60,0.2); }
+    .grade-c   { background: linear-gradient(135deg, #DC2626, #F87171); box-shadow: 0 0 15px rgba(248,113,113,0.2); }
+
+    /* Score Ring */
+    .score-ring { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+    .score-ring svg { transform: rotate(-90deg); }
+    .score-ring .ring-track { stroke: rgba(255,255,255,0.05); }
+    .score-ring .ring-progress { transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1); }
+
+    /* Sparkline */
+    .sparkline { display: inline-block; vertical-align: middle; }
+    .sparkline svg { overflow: visible; }
+
+    /* Map */
+    .leaflet-container { background: #07090E; font-family: inherit; }
+    .leaflet-popup-content-wrapper { background: rgba(12,16,26,0.95); color: #fff; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6); backdrop-filter: blur(20px); }
+    .leaflet-popup-tip { background: rgba(12,16,26,0.95); }
+    .leaflet-popup-close-button { color: #94a3b8 !important; font-size: 20px !important; top: 8px !important; right: 12px !important; }
+    .map-marker { display: flex; align-items: center; justify-content: center; border-radius: 9999px; font-weight: 800; font-size: 10px; color: #fff; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; font-family: 'JetBrains Mono', monospace; border: 2.5px solid rgba(255,255,255,0.9); }
+    .map-marker:hover { transform: scale(1.25); box-shadow: 0 0 24px rgba(56,189,248,0.4); }
+    .leaflet-control-layers { background: rgba(12,16,26,0.9) !important; color: #e2e8f0 !important; border: 1px solid rgba(255,255,255,0.08) !important; border-radius: 14px !important; font-size: 11px !important; backdrop-filter: blur(12px) !important; padding: 10px 14px !important; }
+
+    /* Catalog Card */
+    .catalog-card { transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), box-shadow 0.35s; }
+    .catalog-card:hover { transform: translateY(-8px); box-shadow: 0 30px 60px -15px rgba(0,0,0,0.6), 0 0 40px rgba(56,189,248,0.06); }
+    .catalog-card img { transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
+    .catalog-card:hover img { transform: scale(1.1); }
+
+    /* Tab Pill */
+    .tab-active { background: linear-gradient(135deg, #2563EB, #4F46E5); color: white; box-shadow: 0 4px 15px rgba(37,99,235,0.35); }
+    .tab-idle { color: #94A3B8; }
+    .tab-idle:hover { color: #E2E8F0; background: rgba(255,255,255,0.04); }
+
+    /* Stat Widget Glow */
+    .stat-glow-blue { box-shadow: inset 0 -2px 20px rgba(56,189,248,0.06); border-color: rgba(56,189,248,0.08) !important; }
+    .stat-glow-green { box-shadow: inset 0 -2px 20px rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.08) !important; }
+    .stat-glow-amber { box-shadow: inset 0 -2px 20px rgba(251,191,36,0.06); border-color: rgba(251,191,36,0.08) !important; }
+    .stat-glow-purple { box-shadow: inset 0 -2px 20px rgba(139,92,246,0.06); border-color: rgba(139,92,246,0.08) !important; }
+
+    /* Row hover glow */
+    .row-hover:hover { background: linear-gradient(90deg, rgba(56,189,248,0.03) 0%, rgba(139,92,246,0.02) 100%); }
+    .row-hover { transition: background 0.3s, transform 0.2s; }
+
+    /* Rank badge */
+    .rank-badge { width: 32px; height: 32px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-weight: 900; font-size: 12px; font-family: 'JetBrains Mono', monospace; }
+    .rank-1 { background: linear-gradient(135deg, #F59E0B, #EF4444); color: #fff; box-shadow: 0 0 16px rgba(245,158,11,0.3); }
+    .rank-2 { background: linear-gradient(135deg, #94A3B8, #CBD5E1); color: #0F172A; box-shadow: 0 0 12px rgba(148,163,184,0.2); }
+    .rank-3 { background: linear-gradient(135deg, #D97706, #B45309); color: #fff; box-shadow: 0 0 12px rgba(217,119,6,0.2); }
+    .rank-n { background: rgba(255,255,255,0.04); color: #64748B; border: 1px solid rgba(255,255,255,0.06); }
+
+    /* Mobile ranking cards */
+    .mobile-card { display: none; }
+    @media (max-width: 768px) {
+      .desktop-table { display: none !important; }
+      .mobile-card { display: block !important; }
+    }
+
+    /* Messenger buttons */
+    .msg-btn { transition: all 0.2s; cursor: pointer; }
+    .msg-btn.active { border-color: rgba(56,189,248,0.5); background: rgba(56,189,248,0.1); color: #38BDF8; }
+    .msg-btn:hover { border-color: rgba(255,255,255,0.15); }
+
+    /* Counter animation */
+    @keyframes countPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+    .counting { animation: countPulse 0.1s ease-in-out; }
+
+    /* Leader crown */
+    @keyframes crownFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+    .crown { animation: crownFloat 3s ease-in-out infinite; display: inline-block; }
+
+    /* Smooth scroll */
+    html { scroll-behavior: smooth; }
+
+    /* Developer avatar */
+    .dev-avatar { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: white; flex-shrink: 0; }
+
+    /* Tooltip */
+    .info-tip { position: relative; }
+    .info-tip::after {
+      content: attr(data-tip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-4px);
+      background: rgba(0,0,0,0.9); color: #E2E8F0; padding: 6px 10px; border-radius: 8px; font-size: 10px;
+      white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50;
+    }
+    .info-tip:hover::after { opacity: 1; }
+
+    /* Progress bar */
+    .progress-bar { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.04); overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 2px; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); }
+
+    /* Catalog leader ribbon */
+    .leader-ribbon {
+      position: absolute; top: 16px; left: -8px; z-index: 10;
+      background: linear-gradient(135deg, #F59E0B, #EF4444);
+      color: white; font-size: 10px; font-weight: 800; padding: 4px 14px 4px 10px;
+      border-radius: 0 8px 8px 0; box-shadow: 0 4px 12px rgba(245,158,11,0.3);
+    }
+    .leader-ribbon::before {
+      content: ''; position: absolute; left: 0; bottom: -6px;
+      border-left: 8px solid transparent; border-top: 6px solid #B45309;
+    }
+  </style>
+</head>
+<body class="text-slate-100 min-h-screen flex flex-col selection:bg-indigo-600 selection:text-white">
+
+  <div class="aurora-bg"><div class="aurora-orb3"></div></div>
+
+  <!-- ═══════════════════════ HEADER ═══════════════════════ -->
+  <header class="border-b border-white/[0.04] sticky top-0 z-40 bg-surface-950/80 backdrop-blur-2xl">
+    <div class="max-w-[1400px] mx-auto px-5 h-[72px] flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-black text-white text-sm shadow-lg shadow-blue-600/25 relative">
+          <span class="relative z-10">G</span>
+          <div class="absolute inset-0 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 animate-ping opacity-20"></div>
+        </div>
+        <div class="leading-tight">
+          <span class="text-[15px] font-bold tracking-tight text-white">GeoEstate</span>
+          <span class="ml-1.5 text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-indigo-500/15 text-indigo-400 border border-indigo-500/20 align-middle">Intelligence</span>
+          <p class="text-[10px] text-slate-500 font-medium">AI Trust & Visibility Benchmark</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <!-- Language Switcher -->
+        <div class="flex items-center gap-0.5 bento-sm p-1 rounded-xl text-[10px] font-bold">
+          <button id="lang-ru" onclick="setLang('ru')" class="px-2 py-1 rounded-lg bg-blue-600 text-white transition">RU</button>
+          <button id="lang-en" onclick="setLang('en')" class="px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">EN</button>
+          <button id="lang-tr" onclick="setLang('tr')" class="px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">TR</button>
+        </div>
+        <div class="hidden md:flex items-center gap-2 text-[11px] bento-sm px-3 py-1.5 rounded-xl">
+          <span class="w-[6px] h-[6px] rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400/50"></span>
+          <span class="text-slate-400"><span id="lbl-date">Данные:</span> <strong class="text-slate-200 font-mono" id="header-date">Nov 2026</strong></span>
+        </div>
+        <a href="#b2b" id="btn-dev" class="text-[11px] font-semibold px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white transition shadow-md shadow-blue-600/20 hover:shadow-blue-500/30">
+          Застройщикам (Аудит)
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════ HERO ═══════════════════════ -->
+  <section class="pt-14 pb-8 px-5 max-w-[1400px] mx-auto w-full text-center">
+    <div class="max-w-3xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bento-sm text-[11px] text-slate-400 mb-5">
+        <span class="text-blue-400 font-bold">GEO / LLMO</span>
+        <span class="w-[3px] h-[3px] rounded-full bg-slate-600"></span>
+        <span id="hero-badge">Еженедельный независимый аудит нейросетей</span>
+      </div>
+      <h1 id="hero-title" class="text-4xl sm:text-[52px] font-black tracking-tight text-white leading-[1.1] mb-4">
+        Рейтинг застройщиков<br>по <span class="grad-text">присутствию в AI</span>
+      </h1>
+      <p id="hero-desc" class="text-slate-400 text-sm max-w-xl mx-auto leading-relaxed">
+        Кого рекомендуют ChatGPT, Gemini и Perplexity покупателям зарубежной недвижимости.
+        Анализ судебных рисков, репутации и видимости без рекламы.
+      </p>
+
+      <!-- Country Selector -->
+      <div class="flex flex-wrap items-center justify-center gap-2 mt-8">
+        <button id="cntry-nc" class="px-4 py-2 rounded-xl text-xs font-bold tab-active flex items-center gap-2">🇨🇾 Северный Кипр</button>
+        <button id="cntry-dubai" class="px-4 py-2 rounded-xl text-xs font-medium tab-idle cursor-not-allowed opacity-50 flex items-center gap-2" title="Скоро">🇦🇪 Дубай</button>
+        <button id="cntry-tr" class="px-4 py-2 rounded-xl text-xs font-medium tab-idle cursor-not-allowed opacity-50 flex items-center gap-2" title="Скоро">🇹🇷 Турция</button>
+        <button id="cntry-bali" class="px-4 py-2 rounded-xl text-xs font-medium tab-idle cursor-not-allowed opacity-50 flex items-center gap-2" title="Скоро">🇮🇩 Бали</button>
+      </div>
+    </div>
+
+    <!-- Stat Widgets with Animated Counters -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-10 max-w-4xl mx-auto">
+      <div class="bento rounded-2xl p-4 stat-glow-blue text-left group hover:scale-[1.02] transition-transform">
+        <span class="text-[10px] text-slate-500 uppercase tracking-wider font-semibold flex items-center gap-1.5">
+          <svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/></svg>
+          <span id="stat-lbl-plat">Платформы</span>
+        </span>
+        <div class="text-sm font-bold text-white mt-1.5 flex items-center gap-1.5">
+          <span class="w-5 h-5 rounded-md bg-emerald-500/15 flex items-center justify-center text-[10px]">🤖</span>
+          <span class="w-5 h-5 rounded-md bg-blue-500/15 flex items-center justify-center text-[10px]">✨</span>
+          <span class="w-5 h-5 rounded-md bg-purple-500/15 flex items-center justify-center text-[10px]">🔍</span>
+          <span class="text-[11px] ml-1">ChatGPT · Gemini · Perplexity</span>
+        </div>
+      </div>
+      <div class="bento rounded-2xl p-4 stat-glow-green text-left group hover:scale-[1.02] transition-transform">
+        <span class="text-[10px] text-slate-500 uppercase tracking-wider font-semibold flex items-center gap-1.5">
+          <svg class="w-3 h-3 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/></svg>
+          <span id="stat-lbl-devs">Девелоперов</span>
+        </span>
+        <div class="text-2xl font-black text-emerald-400 mt-1 font-mono" id="stat-count" data-target="12">0</div>
+      </div>
+      <div class="bento rounded-2xl p-4 stat-glow-purple text-left group hover:scale-[1.02] transition-transform">
+        <span class="text-[10px] text-slate-500 uppercase tracking-wider font-semibold flex items-center gap-1.5">
+          <svg class="w-3 h-3 text-purple-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z" clip-rule="evenodd"/></svg>
+          <span id="stat-lbl-lead">Лидер репутации</span>
+        </span>
+        <div class="text-sm font-bold text-white mt-1.5 flex items-center gap-1.5" id="stat-leader">
+          <span class="crown">👑</span> Döveç Group
+        </div>
+      </div>
+      <div class="bento rounded-2xl p-4 stat-glow-amber text-left group hover:scale-[1.02] transition-transform">
+        <span class="text-[10px] text-slate-500 uppercase tracking-wider font-semibold flex items-center gap-1.5">
+          <svg class="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+          <span id="stat-lbl-risk">Стоп-фактор №1</span>
+        </span>
+        <div id="stat-lbl-risk-val" class="text-sm font-bold text-amber-400 mt-1.5">⚠️ Суды & Отзывы</div>
+      </div>
+    </div>
+
+    <!-- Main Tabs -->
+    <div class="inline-flex items-center gap-1.5 mt-10 p-1.5 bento rounded-2xl">
+      <button id="tbtn-rank" onclick="switchView('ranking')" class="px-5 py-2.5 rounded-xl text-xs font-bold transition tab-active">🏆 Рейтинг</button>
+      <button id="tbtn-map" onclick="switchView('map')" class="px-5 py-2.5 rounded-xl text-xs font-bold transition tab-idle">🛰️ Карта проектов</button>
+      <button id="tbtn-cat" onclick="switchView('catalog')" class="px-5 py-2.5 rounded-xl text-xs font-bold transition tab-idle">🏛️ Каталог</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ VIEW: RANKING ═══════════════════════ -->
+  <main id="v-rank" class="max-w-[1400px] mx-auto w-full px-5 pb-20">
+    <div class="bento rounded-3xl overflow-hidden">
+      <!-- Table Header -->
+      <div class="p-5 border-b border-white/[0.04] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            AI Trust & Visibility Index
+            <span class="text-[9px] font-semibold px-2 py-0.5 rounded-md bg-blue-500/10 text-blue-400 border border-blue-500/15">LIVE</span>
+          </h2>
+          <p id="tbl-sub" class="text-[11px] text-slate-500 mt-0.5">55% Share of Voice · 40% Рекомендации · Штрафы за риски</p>
+        </div>
+        <select id="reg-filter" onchange="filterTable()" class="bg-surface-800 border border-white/[0.06] text-[11px] text-white rounded-xl px-3 py-2 focus:outline-none focus:border-blue-500/50 font-medium cursor-pointer">
+          <option id="reg-opt-all" value="all">Все регионы</option>
+          <option value="İskele">Искеле / Long Beach</option>
+          <option value="Kyrenia">Кирения (Girne)</option>
+          <option value="Famagusta">Фамагуста</option>
+          <option value="Esentepe">Эсентепе</option>
+        </select>
+      </div>
+
+      <!-- Desktop Table -->
+      <div class="overflow-x-auto desktop-table">
+        <table class="w-full text-left text-sm text-slate-300">
+          <thead class="text-[10px] uppercase text-slate-500 font-semibold tracking-wider border-b border-white/[0.04] bg-surface-950/40">
+            <tr>
+              <th class="py-3.5 px-5 w-14"></th>
+              <th id="th-dev" class="py-3.5 px-4">Застройщик</th>
+              <th id="th-reg" class="py-3.5 px-4">Регион</th>
+              <th id="th-score" class="py-3.5 px-4 text-center info-tip" data-tip="Комплексный AI-индекс доверия (0-100)">AI Score</th>
+              <th id="th-sov" class="py-3.5 px-4 text-center info-tip" data-tip="Доля упоминаний среди всех девелоперов">SoV %</th>
+              <th id="th-rec" class="py-3.5 px-4 text-center info-tip" data-tip="Процент положительных рекомендаций">Рекомендации</th>
+              <th id="th-trend" class="py-3.5 px-4 text-center">Тренд</th>
+              <th class="py-3.5 px-4 text-right"></th>
+            </tr>
+          </thead>
+          <tbody id="rank-tbody" class="divide-y divide-white/[0.03]"></tbody>
+        </table>
+      </div>
+
+      <!-- Mobile Cards -->
+      <div id="rank-mobile" class="mobile-card p-4 space-y-3"></div>
+    </div>
+  </main>
+
+  <!-- ═══════════════════════ VIEW: MAP ═══════════════════════ -->
+  <section id="v-map" class="max-w-[1400px] mx-auto w-full px-5 pb-20 hidden">
+    <div class="bento rounded-3xl overflow-hidden">
+      <div class="p-5 border-b border-white/[0.04] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <span id="map-title">Карта официальных строек первичного рынка</span>
+            <span class="text-[9px] font-semibold px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/15">SATELLITE</span>
+          </h2>
+          <p class="text-[11px] text-slate-500"><span id="map-sub">Цифра на маркере = </span><strong class="text-emerald-400" id="map-sub-bold">AI-индекс надёжности</strong> <span id="map-sub-end">застройщика (0—100)</span></p>
+        </div>
+        <div class="flex items-center gap-3 text-[11px] font-medium">
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/40"></span> <span id="map-leg-top">Топ (>75)</span></span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-amber-500 shadow-sm shadow-amber-500/40"></span> <span id="map-leg-high">Высокий (48–74)</span></span>
+          <span id="map-leg-safe" class="text-[10px] text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/15">🛡️ Без судебных рисков</span>
+        </div>
+      </div>
+      <div id="map-box" class="w-full h-[640px]"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ VIEW: CATALOG ═══════════════════════ -->
+  <section id="v-cat" class="max-w-[1400px] mx-auto w-full px-5 pb-20 hidden">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-3">
+      <div>
+        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+          <span id="cat-title">Официальные комплексы от девелоперов</span>
+          <span id="cat-badge" class="text-[9px] font-semibold px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/15">ПЕРВИЧКА</span>
+        </h2>
+        <p id="cat-sub" class="text-[11px] text-slate-500">Прямые цены, беспроцентные рассрочки, проверенные титулы</p>
+      </div>
+      <select id="cat-filter" onchange="filterCatalog()" class="bg-surface-800 border border-white/[0.06] text-[11px] text-white rounded-xl px-3 py-2 cursor-pointer">
+        <option id="cat-opt-all" value="all">Все застройщики</option>
+      </select>
+    </div>
+    <div id="cat-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+  </section>
+
+  <!-- ═══════════════════════ LEAD GEN ═══════════════════════ -->
+  <section class="max-w-[1400px] mx-auto w-full px-5 pb-20">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <!-- B2C -->
+      <div class="bento rounded-3xl p-7 relative overflow-hidden">
+        <span id="b2c-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-[10px] font-bold mb-4 border border-blue-500/15 uppercase tracking-wider">🛡️ Для инвесторов и покупателей</span>
+        <h3 id="b2c-title" class="text-xl font-bold text-white mb-2">Ищете безопасную недвижимость?</h3>
+        <p id="b2c-desc" class="text-[11px] text-slate-400 leading-relaxed mb-5">Нейросети отсекают застройщиков с судами и задержками. Получите персональную подборку проверенных комплексов из Топ-5 рейтинга с чистыми титулами (Eşdeğer / Pre-74).</p>
+        <form onsubmit="handleB2C(event)" class="flex gap-2">
+          <input id="b2c-in" type="text" placeholder="Telegram @username или WhatsApp" required class="flex-1 bg-surface-800 border border-white/[0.06] text-[11px] rounded-xl px-3.5 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors">
+          <button type="submit" id="b2c-btn" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold rounded-xl transition shadow-lg shadow-blue-600/20 whitespace-nowrap">Подобрать объект</button>
+        </form>
+        <p id="b2c-ok" class="text-[11px] text-emerald-400 mt-2 hidden flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          <span id="b2c-ok-txt">Подготовим персональную подборку в течение 10 минут.</span>
+        </p>
+      </div>
+      <!-- B2B -->
+      <div id="b2b" class="bento rounded-3xl p-7 relative overflow-hidden">
+        <span id="b2b-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-[10px] font-bold mb-4 border border-purple-500/15 uppercase tracking-wider">⚡ Для девелоперов и агентств</span>
+        <h3 id="b2b-title" class="text-xl font-bold text-white mb-2">Вы представитель застройщика?</h3>
+        <p id="b2b-desc" class="text-[11px] text-slate-400 leading-relaxed mb-5">Если ваш бренд пессимизируется в ChatGPT или не входит в Топ-3 ответов — вы теряете до 40% прямых клиентов. Закажите комплексную оптимизацию присутствия в LLM (GEO).</p>
+        <form onsubmit="handleB2B(event)" class="flex gap-2">
+          <input id="b2b-in" type="text" placeholder="Название компании + Контакт" required class="flex-1 bg-surface-800 border border-white/[0.06] text-[11px] rounded-xl px-3.5 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-purple-500/50 transition-colors">
+          <button type="submit" id="b2b-btn" class="px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white text-[11px] font-bold rounded-xl transition shadow-lg shadow-purple-600/20 whitespace-nowrap">Заказать GEO-аудит</button>
+        </form>
+        <p id="b2b-ok" class="text-[11px] text-emerald-400 mt-2 hidden flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          <span id="b2b-ok-txt">Запрос принят. Подготовим аналитический аудит видимости.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ MODALS ═══════════════════════ -->
+  <!-- Developer Detail Modal -->
+  <div id="mod-dev" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4" onclick="if(event.target===this)closeMod('mod-dev')">
+    <div class="bento max-w-2xl w-full rounded-3xl p-7 relative animate-[fadeIn_0.2s_ease-out]" style="animation: fadeIn 0.25s ease-out">
+      <button onclick="closeMod('mod-dev')" class="absolute top-5 right-5 w-8 h-8 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] flex items-center justify-center text-slate-500 hover:text-white text-lg transition">✕</button>
+      <div class="flex items-center gap-4 mb-6">
+        <div id="md-grade" class="w-14 h-14 rounded-2xl flex items-center justify-center font-black text-white text-base grade-aaa">AAA</div>
+        <div>
+          <h3 id="md-name" class="text-xl font-bold text-white">Dev</h3>
+          <p id="md-region" class="text-[11px] text-slate-500">Region</p>
+        </div>
+      </div>
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-4 gap-2 mb-6">
+        <div class="bento-sm rounded-xl p-3 text-center">
+          <div class="text-[9px] text-slate-500 uppercase tracking-wider font-semibold">AI Score</div>
+          <div id="md-score" class="text-2xl font-black text-blue-400 font-mono mt-1">86</div>
+          <div id="md-score-bar" class="progress-bar mt-2"><div class="progress-fill bg-blue-400" style="width:86%"></div></div>
+        </div>
+        <div class="bento-sm rounded-xl p-3 text-center">
+          <div class="text-[9px] text-slate-500 uppercase tracking-wider font-semibold">Видимость</div>
+          <div id="md-sov" class="text-2xl font-bold text-slate-200 font-mono mt-1">73%</div>
+          <div id="md-sov-bar" class="progress-bar mt-2"><div class="progress-fill bg-slate-400" style="width:73%"></div></div>
+        </div>
+        <div class="bento-sm rounded-xl p-3 text-center">
+          <div class="text-[9px] text-slate-500 uppercase tracking-wider font-semibold">Рекомендации</div>
+          <div id="md-rec" class="text-2xl font-bold text-emerald-400 font-mono mt-1">82%</div>
+          <div id="md-rec-bar" class="progress-bar mt-2"><div class="progress-fill bg-emerald-400" style="width:82%"></div></div>
+        </div>
+        <div class="bento-sm rounded-xl p-3 text-center">
+          <div class="text-[9px] text-slate-500 uppercase tracking-wider font-semibold">Упоминания</div>
+          <div id="md-ment" class="text-2xl font-bold text-slate-200 font-mono mt-1">22</div>
+          <div id="md-ment-bar" class="progress-bar mt-2"><div class="progress-fill bg-purple-400" style="width:73%"></div></div>
+        </div>
+      </div>
+      <div class="space-y-3 text-[11px]">
+        <div class="p-4 rounded-2xl bg-emerald-950/20 border border-emerald-500/15">
+          <strong class="text-emerald-400 text-xs flex items-center gap-1.5 mb-1.5">
+            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Вердикт нейросетей (сильные стороны):
+          </strong>
+          <p id="md-pros" class="text-slate-300 leading-relaxed">...</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-amber-950/20 border border-amber-500/15">
+          <strong class="text-amber-400 text-xs flex items-center gap-1.5 mb-1.5">
+            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+            Выявленные риски и стоп-факторы:
+          </strong>
+          <p id="md-risks" class="text-slate-300 leading-relaxed">...</p>
+        </div>
+      </div>
+      <div class="flex justify-between mt-6">
+        <button id="md-map-btn" class="px-4 py-2 text-xs font-bold rounded-xl bg-blue-600 hover:bg-blue-500 text-white transition flex items-center gap-1.5 hover:-translate-y-0.5">📍 На карте</button>
+        <button onclick="closeMod('mod-dev')" class="px-4 py-2 text-xs font-bold rounded-xl bg-surface-700 hover:bg-surface-600 text-slate-300 transition">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project Inquiry Modal -->
+  <div id="mod-proj" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4" onclick="if(event.target===this)closeMod('mod-proj')">
+    <div class="bento max-w-lg w-full rounded-3xl p-7 relative" style="animation: fadeIn 0.25s ease-out">
+      <button onclick="closeMod('mod-proj')" class="absolute top-5 right-5 w-8 h-8 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] flex items-center justify-center text-slate-500 hover:text-white text-lg transition">✕</button>
+      <span class="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-blue-600 text-white" id="pm-dev">Dev</span>
+      <span class="text-[11px] text-slate-500 ml-2" id="pm-reg">Reg</span>
+      <h3 id="pm-title" class="text-xl font-bold text-white mt-3 mb-1">Project</h3>
+      <div id="pm-price" class="text-emerald-400 font-black text-lg font-mono mb-3">£95,000</div>
+      <p id="pm-desc" class="text-[11px] text-slate-400 mb-4"></p>
+      <div id="pm-feat" class="p-3 bento-sm rounded-xl text-[11px] space-y-1.5 mb-5"></div>
+      <form onsubmit="handleInq(event)" class="space-y-3">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-[10px] text-slate-500 font-semibold">Связь:</span>
+          <button type="button" onclick="setMsg(this,'tg2')" class="msg-btn active text-[10px] px-2 py-0.5 rounded-lg border border-white/[0.08] font-semibold">💬 TG</button>
+          <button type="button" onclick="setMsg(this,'wa2')" class="msg-btn text-[10px] text-slate-400 px-2 py-0.5 rounded-lg border border-white/[0.06] font-semibold">📱 WA</button>
+          <button type="button" onclick="setMsg(this,'em2')" class="msg-btn text-[10px] text-slate-400 px-2 py-0.5 rounded-lg border border-white/[0.06] font-semibold">📧 Email</button>
+        </div>
+        <input id="inq-in" type="text" placeholder="Telegram или WhatsApp для связи" required class="w-full bg-surface-800 border border-white/[0.06] text-[11px] rounded-xl px-3.5 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors">
+        <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition hover:-translate-y-0.5 shadow-lg shadow-blue-600/20">Получить официальную презентацию и прайс-лист</button>
+        <p id="inq-ok" class="text-[11px] text-emerald-400 text-center hidden flex items-center justify-center gap-1.5">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          Материалы будут высланы в течение 10 минут.
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <footer class="border-t border-white/[0.03] py-6 text-center text-[10px] text-slate-600">
+    © 2026 GeoEstate Intelligence. Независимый рейтинг на базе промптов покупателей без аффилиации.
+  </footer>
+
+  <!-- ═══════════════════════ SCRIPTS ═══════════════════════ -->
+  <script src="rankings_data.js"></script>
+  <script src="projects_data.js"></script>
+  <script>
+    let D = (typeof window !== 'undefined' && window.RANKINGS_DATA && window.RANKINGS_DATA.rankings) ? window.RANKINGS_DATA.rankings : [];
+    let P = (typeof window !== 'undefined' && window.OFFICIAL_PROJECTS) ? window.OFFICIAL_PROJECTS : [];
+    let map = null, markersLayer = null;
+
+    /* ═══════════════════════ MULTI-LANGUAGE I18N ═══════════════════════ */
+    const I18N = {
+      ru: {
+        lbl_date: "Данные:",
+        btn_dev: "Застройщикам (Аудит)",
+        hero_badge: "Еженедельный независимый аудит нейросетей",
+        hero_title: 'Рейтинг застройщиков<br>по <span class="grad-text">присутствию в AI</span>',
+        hero_desc: "Кого рекомендуют ChatGPT, Gemini и Perplexity покупателям зарубежной недвижимости. Анализ судебных рисков, репутации и видимости без рекламы.",
+        country_nc: "🇨🇾 Северный Кипр",
+        country_dubai: "🇦🇪 Дубай",
+        country_tr: "🇹🇷 Турция",
+        country_bali: "🇮🇩 Бали",
+        stat_plat: "Платформы",
+        stat_devs: "Девелоперов",
+        stat_lead: "Лидер репутации",
+        stat_risk: "Стоп-фактор №1",
+        stat_risk_val: "⚠️ Суды & Отзывы",
+        tab_rank: "🏆 Рейтинг",
+        tab_map: "🛰️ Карта проектов",
+        tab_cat: "🏛️ Каталог",
+        tbl_sub: "55% Share of Voice · 40% Рекомендации · Штрафы за риски",
+        reg_all: "Все регионы",
+        th_dev: "Застройщик",
+        th_reg: "Регион",
+        th_rec: "Рекомендации",
+        th_trend: "Тренд",
+        btn_audit: "Аудит",
+        units_label: "ЖК",
+        map_title: "Карта официальных строек первичного рынка",
+        map_sub: "Цифра на маркере = ",
+        map_sub_bold: "AI-индекс надёжности",
+        map_sub_end: "застройщика (0—100)",
+        map_leg_top: "Топ (>75)",
+        map_leg_high: "Высокий (48–74)",
+        map_leg_safe: "🛡️ Без судебных рисков",
+        cat_title: "Официальные комплексы от девелоперов",
+        cat_badge: "ПЕРВИЧКА",
+        cat_sub: "Прямые цены, беспроцентные рассрочки, проверенные титулы",
+        cat_opt_all: "Все застройщики",
+        card_top: "Топ",
+        card_price_from: "Официальная цена от",
+        card_pres: "Презентация →",
+        b2c_badge: "🛡️ Для инвесторов и покупателей",
+        b2c_title: "Ищете безопасную недвижимость?",
+        b2c_desc: "Нейросети отсекают застройщиков с судами и задержками. Получите персональную подборку проверенных комплексов из Топ-5 рейтинга с чистыми титулами (Eşdeğer / Pre-74).",
+        b2c_ph: "Telegram @username или WhatsApp",
+        b2c_btn: "Подобрать объект",
+        b2c_ok: "Подготовим персональную подборку в течение 10 минут.",
+        b2b_badge: "⚡ Для девелоперов и агентств",
+        b2b_title: "Вы представитель застройщика?",
+        b2b_desc: "Если ваш бренд пессимизируется в ChatGPT или не входит в Топ-3 ответов — вы теряете до 40% прямых клиентов. Закажите комплексную оптимизацию присутствия в LLM (GEO).",
+        b2b_ph: "Название компании + Контакт",
+        b2b_btn: "Заказать GEO-аудит",
+        b2b_ok: "Запрос принят. Подготовим аналитический аудит видимости.",
+        md_sov_lbl: "Видимость",
+        md_rec_lbl: "Рекомендации",
+        md_ment_lbl: "Упоминания",
+        md_pros_lbl: "Ключевые преимущества в AI",
+        md_risks_lbl: "Факторы риска и судебный фон",
+        md_map_btn: "Показать объекты на карте →",
+        pm_lbl_req: "Запросить брошюру и планировки",
+        pm_lbl_reqdesc: "Оставьте WhatsApp или Telegram для отправки официальной PDF-презентации и актуального прайс-листа:",
+        pm_in_ph: "Ваш телефон / WhatsApp / Telegram...",
+        pm_btn_send: "Получить",
+        pm_ok: "✓ Заявка отправлена! Менеджер отправит презентацию в течение 5 минут."
+      },
+      en: {
+        lbl_date: "Data:",
+        btn_dev: "For Developers (Audit)",
+        hero_badge: "Weekly independent AI benchmark",
+        hero_title: 'Developer Rankings<br>by <span class="grad-text">AI Visibility</span>',
+        hero_desc: "Who ChatGPT, Gemini, and Perplexity recommend to international property buyers. Legal risks, reputation, and visibility benchmark with zero ads.",
+        country_nc: "🇨🇾 North Cyprus",
+        country_dubai: "🇦🇪 Dubai",
+        country_tr: "🇹🇷 Turkey",
+        country_bali: "🇮🇩 Bali",
+        stat_plat: "Platforms",
+        stat_devs: "Developers",
+        stat_lead: "Reputation Leader",
+        stat_risk: "Top Risk Factor",
+        stat_risk_val: "⚠️ Lawsuits & Reviews",
+        tab_rank: "🏆 Rankings",
+        tab_map: "🛰️ Projects Map",
+        tab_cat: "🏛️ Catalog",
+        tbl_sub: "55% Share of Voice · 40% Recommendations · Legal Penalties",
+        reg_all: "All Regions",
+        th_dev: "Developer",
+        th_reg: "Region",
+        th_rec: "Recommendations",
+        th_trend: "Trend",
+        btn_audit: "Audit",
+        units_label: "Projects",
+        map_title: "Primary Market Official Construction Map",
+        map_sub: "Marker number = ",
+        map_sub_bold: "AI Trust Index",
+        map_sub_end: "of developer (0—100)",
+        map_leg_top: "Top (>75)",
+        map_leg_high: "High (48–74)",
+        map_leg_safe: "🛡️ Zero Legal Risks",
+        cat_title: "Official Developer Complexes",
+        cat_badge: "PRIMARY",
+        cat_sub: "Direct prices, 0% installment plans, verified title deeds",
+        cat_opt_all: "All developers",
+        card_top: "Top",
+        card_price_from: "Official price from",
+        card_pres: "Presentation →",
+        b2c_badge: "🛡️ For Investors & Buyers",
+        b2c_title: "Looking for safe real estate?",
+        b2c_desc: "AI models filter out developers with active litigations and delays. Receive a curated selection of Top-5 verified developments with clean title deeds (Exchange / Pre-74).",
+        b2c_ph: "Telegram @username or WhatsApp",
+        b2c_btn: "Find Property",
+        b2c_ok: "We will prepare your tailored selection within 10 minutes.",
+        b2b_badge: "⚡ For Developers & Agencies",
+        b2b_title: "Are you a developer representative?",
+        b2b_desc: "If your brand is penalized in ChatGPT or omitted from Top-3 answers, you lose up to 40% of direct clients. Request an advanced LLM presence audit (GEO).",
+        b2b_ph: "Company Name + Contact",
+        b2b_btn: "Request GEO Audit",
+        b2b_ok: "Request received. We will prepare an in-depth visibility audit.",
+        md_sov_lbl: "Visibility",
+        md_rec_lbl: "Recommendations",
+        md_ment_lbl: "Mentions",
+        md_pros_lbl: "Key AI Strengths",
+        md_risks_lbl: "Risk Factors & Legal History",
+        md_map_btn: "Show projects on map →",
+        pm_lbl_req: "Request Brochure & Floorplans",
+        pm_lbl_reqdesc: "Leave your WhatsApp or Telegram to receive the official PDF presentation and price list:",
+        pm_in_ph: "Your Phone / WhatsApp / Telegram...",
+        pm_btn_send: "Get PDF",
+        pm_ok: "✓ Request sent! Manager will send the presentation within 5 minutes."
+      },
+      tr: {
+        lbl_date: "Veri:",
+        btn_dev: "Geliştiricilere (Denetim)",
+        hero_badge: "Haftalık bağımsız yapay zeka denetimi",
+        hero_title: 'Yapay Zeka Görünürlüğüne Göre<br><span class="grad-text">Geliştirici Sıralaması</span>',
+        hero_desc: "ChatGPT, Gemini ve Perplexity'nin gayrimenkul alıcılarına kimi önerdiği. Hukuki riskler, itibar ve görünürlük analizi (reklamsız).",
+        country_nc: "🇨🇾 Kuzey Kıbrıs",
+        country_dubai: "🇦🇪 Dubai",
+        country_tr: "🇹🇷 Türkiye",
+        country_bali: "🇮🇩 Bali",
+        stat_plat: "Platformlar",
+        stat_devs: "Geliştiriciler",
+        stat_lead: "İtibar Lideri",
+        stat_risk: "1 Numaralı Risk",
+        stat_risk_val: "⚠️ Dava ve Şikayetler",
+        tab_rank: "🏆 Sıralama",
+        tab_map: "🛰️ Proje Haritası",
+        tab_cat: "🏛️ Katalog",
+        tbl_sub: "55% Ses Payı · 40% Öneriler · Hukuki Risk Cezaları",
+        reg_all: "Tüm Bölgeler",
+        th_dev: "Geliştirici",
+        th_reg: "Bölge",
+        th_rec: "Öneriler",
+        th_trend: "Trend",
+        btn_audit: "Denetim",
+        units_label: "Proje",
+        map_title: "Birincil Piyasa Resmi Proje Haritası",
+        map_sub: "İşaretçi numarası = ",
+        map_sub_bold: "AI Güven Endeksi",
+        map_sub_end: "(0—100)",
+        map_leg_top: "En İyi (>75)",
+        map_leg_high: "Yüksek (48–74)",
+        map_leg_safe: "🛡️ Hukuki Risksiz",
+        cat_title: "Geliştiricilerden Resmi Projeler",
+        cat_badge: "BİRİNCİL",
+        cat_sub: "Doğrudan fiyatlar, faizsiz taksit planları, onaylı koçanlar",
+        cat_opt_all: "Tüm geliştiriciler",
+        card_top: "En İyi",
+        card_price_from: "Resmi başlangıç fiyatı",
+        card_pres: "Sunum →",
+        b2c_badge: "🛡️ Yatırımcılar ve Alıcılar İçin",
+        b2c_title: "Güvenli gayrimenkul mü arıyorsunuz?",
+        b2c_desc: "Yapay zeka modelleri davalı ve geciken geliştiricileri eler. Temiz koçanlı (Eşdeğer / 74 Öncesi) İlk 5 doğrulanmış projelerden özel liste alın.",
+        b2c_ph: "Telegram @kullanıcıadı veya WhatsApp",
+        b2c_btn: "Proje Seç",
+        b2c_ok: "10 dakika içinde size özel listenizi hazırlayacağız.",
+        b2b_badge: "⚡ Geliştiriciler ve Acenteler İçin",
+        b2b_title: "Geliştirici temsilcisi misiniz?",
+        b2b_desc: "Markanız ChatGPT'de cezalandırılıyor veya İlk 3'te çıkmıyorsa, doğrudan alıcıların %40'ını kaybediyorsunuz demektir. Kapsamlı LLM optimizasyonu (GEO) talep edin.",
+        b2b_ph: "Şirket Adı + İletişim",
+        b2b_btn: "GEO Denetimi İste",
+        b2b_ok: "Talebiniz alındı. Görünürlük denetiminizi hazırlayacağız.",
+        md_sov_lbl: "Görünürlük",
+        md_rec_lbl: "Öneriler",
+        md_ment_lbl: "Bahisler",
+        md_pros_lbl: "Yapay Zekadaki Güçlü Yönler",
+        md_risks_lbl: "Risk Faktörleri ve Hukuki Geçmiş",
+        md_map_btn: "Projeleri haritada göster →",
+        pm_lbl_req: "Katalog ve Kat Planı İste",
+        pm_lbl_reqdesc: "Resmi PDF sunumunu ve güncel fiyat listesini almak için WhatsApp veya Telegram bırakın:",
+        pm_in_ph: "Telefon / WhatsApp / Telegram...",
+        pm_btn_send: "Gönder",
+        pm_ok: "✓ Talebiniz alındı! Yetkili 5 dakika içinde sunumu iletecektir."
+      }
+    };
+
+    let currentLang = localStorage.getItem('geoestate_lang') || 'ru';
+
+    function t(key) {
+      const dict = I18N[currentLang] || I18N.ru;
+      return dict[key] || key;
+    }
+
+    function setLang(lang) {
+      if (!I18N[lang]) lang = 'ru';
+      currentLang = lang;
+      localStorage.setItem('geoestate_lang', lang);
+
+      // Update button styling
+      ['ru', 'en', 'tr'].forEach(l => {
+        const btn = document.getElementById('lang-' + l);
+        if (btn) {
+          if (l === lang) {
+            btn.className = 'px-2 py-1 rounded-lg bg-blue-600 text-white transition';
+          } else {
+            btn.className = 'px-2 py-1 rounded-lg text-slate-400 hover:text-white transition';
+          }
+        }
+      });
+
+      // Update static text elements
+      const dict = I18N[lang];
+      const setText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
+      const setHtml = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
+
+      setText('lbl-date', dict.lbl_date);
+      setText('btn-dev', dict.btn_dev);
+      setText('hero-badge', dict.hero_badge);
+      setHtml('hero-title', dict.hero_title);
+      setText('hero-desc', dict.hero_desc);
+      setText('cntry-nc', dict.country_nc);
+      setText('cntry-dubai', dict.country_dubai);
+      setText('cntry-tr', dict.country_tr);
+      setText('cntry-bali', dict.country_bali);
+
+      setText('stat-lbl-plat', dict.stat_plat);
+      setText('stat-lbl-devs', dict.stat_devs);
+      setText('stat-lbl-lead', dict.stat_lead);
+      setText('stat-lbl-risk', dict.stat_risk);
+      setText('stat-lbl-risk-val', dict.stat_risk_val);
+
+      setText('tbtn-rank', dict.tab_rank);
+      setText('tbtn-map', dict.tab_map);
+      setText('tbtn-cat', dict.tab_cat);
+
+      setText('tbl-sub', dict.tbl_sub);
+      const regOpt = document.getElementById('reg-opt-all');
+      if (regOpt) regOpt.innerText = dict.reg_all;
+      setText('th-dev', dict.th_dev);
+      setText('th-reg', dict.th_reg);
+      setText('th-rec', dict.th_rec);
+      setText('th-trend', dict.th_trend);
+
+      setText('map-title', dict.map_title);
+      setText('map-sub', dict.map_sub);
+      setText('map-sub-bold', dict.map_sub_bold);
+      setText('map-sub-end', dict.map_sub_end);
+      setText('map-leg-top', dict.map_leg_top);
+      setText('map-leg-high', dict.map_leg_high);
+      setText('map-leg-safe', dict.map_leg_safe);
+
+      setText('cat-title', dict.cat_title);
+      setText('cat-badge', dict.cat_badge);
+      setText('cat-sub', dict.cat_sub);
+      const catOpt = document.getElementById('cat-opt-all');
+      if (catOpt) catOpt.innerText = dict.cat_opt_all;
+
+      setText('b2c-badge', dict.b2c_badge);
+      setText('b2c-title', dict.b2c_title);
+      setText('b2c-desc', dict.b2c_desc);
+      const b2cIn = document.getElementById('b2c-in');
+      if (b2cIn) b2cIn.placeholder = dict.b2c_ph;
+      setText('b2c-btn', dict.b2c_btn);
+      setText('b2c-ok-txt', dict.b2c_ok);
+
+      setText('b2b-badge', dict.b2b_badge);
+      setText('b2b-title', dict.b2b_title);
+      setText('b2b-desc', dict.b2b_desc);
+      const b2bIn = document.getElementById('b2b-in');
+      if (b2bIn) b2bIn.placeholder = dict.b2b_ph;
+      setText('b2b-btn', dict.b2b_btn);
+      setText('b2b-ok-txt', dict.b2b_ok);
+
+      setText('md-sov-lbl', dict.md_sov_lbl);
+      setText('md-rec-lbl', dict.md_rec_lbl);
+      setText('md-ment-lbl', dict.md_ment_lbl);
+      setText('md-pros-lbl', dict.md_pros_lbl);
+      setText('md-risks-lbl', dict.md_risks_lbl);
+      setText('md-map-btn', dict.md_map_btn);
+
+      setText('pm-lbl-req', dict.pm_lbl_req);
+      setText('pm-lbl-reqdesc', dict.pm_lbl_reqdesc);
+      const pmIn = document.getElementById('inq-in');
+      if (pmIn) pmIn.placeholder = dict.pm_in_ph;
+      setText('pm-btn-send', dict.pm_btn_send);
+      setText('inq-ok', dict.pm_ok);
+
+      // Re-render table and catalog with updated language labels
+      if (D && D.length) renderTable(D);
+      if (P && P.length) {
+        const catVal = document.getElementById('cat-filter') ? document.getElementById('cat-filter').value : 'all';
+        renderCatalog(catVal === 'all' ? P : P.filter(p => p.developer_name === catVal));
+      }
+    }
+
+
+    /* ── Color Palette for Avatars ── */
+    const AVATAR_COLORS = [
+      'from-blue-600 to-indigo-600','from-emerald-600 to-teal-600','from-purple-600 to-pink-600',
+      'from-amber-600 to-orange-600','from-cyan-600 to-blue-600','from-rose-600 to-red-600',
+      'from-violet-600 to-purple-600','from-lime-600 to-green-600','from-fuchsia-600 to-pink-600',
+      'from-sky-600 to-cyan-600','from-teal-600 to-emerald-600','from-orange-600 to-amber-600'
+    ];
+
+    /* ── Helpers ── */
+    function getGrade(score) {
+      if (score >= 80) return { label: 'AAA', cls: 'grade-aaa', desc: 'Максимальная надёжность' };
+      if (score >= 70) return { label: 'AA',  cls: 'grade-aa',  desc: 'Высокая надёжность' };
+      if (score >= 60) return { label: 'A',   cls: 'grade-a',   desc: 'Хорошая надёжность' };
+      if (score >= 45) return { label: 'BBB', cls: 'grade-bbb', desc: 'Умеренная надёжность' };
+      if (score >= 30) return { label: 'BB',  cls: 'grade-bb',  desc: 'Ниже среднего' };
+      return { label: 'C', cls: 'grade-c', desc: 'Высокий риск' };
+    }
+
+    function scoreColor(score) {
+      if (score >= 70) return '#10B981';
+      if (score >= 45) return '#FBBF24';
+      return '#F87171';
+    }
+
+    function sparkSVG(score) {
+      const seed = score * 7.3;
+      const pts = [];
+      for (let i = 0; i < 8; i++) {
+        const y = 22 - ((score + Math.sin(seed + i * 1.4) * 8) / 100) * 20;
+        pts.push(`${i * 7},${y.toFixed(1)}`);
+      }
+      const color = scoreColor(score);
+      return `<svg width="49" height="24" class="sparkline"><defs><linearGradient id="sg${Math.round(score)}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${color}" stop-opacity="0.3"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></linearGradient></defs><polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polygon points="0,24 ${pts.join(' ')} 49,24" fill="url(#sg${Math.round(score)})"/></svg>`;
+    }
+
+    function scoreRingSVG(score, size=40) {
+      const r = (size - 4) / 2;
+      const circ = 2 * Math.PI * r;
+      const offset = circ - (score / 100) * circ;
+      const color = scoreColor(score);
+      return `<div class="score-ring" style="width:${size}px;height:${size}px">
+        <svg width="${size}" height="${size}">
+          <circle class="ring-track" cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke-width="3"/>
+          <circle class="ring-progress" cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${offset}"/>
+        </svg>
+        <span class="absolute inset-0 flex items-center justify-center font-black text-xs font-mono" style="color:${color}">${Math.round(score)}</span>
+      </div>`;
+    }
+
+    function devScore(devId) {
+      const d = D.find(x => x.id === devId);
+      return d ? d.score : 50;
+    }
+
+    function devRank(devId) {
+      const d = D.find(x => x.id === devId);
+      return d ? d.rank : 99;
+    }
+
+    function avatarHTML(name, idx) {
+      const initials = name.split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase();
+      const col = AVATAR_COLORS[idx % AVATAR_COLORS.length];
+      return `<div class="dev-avatar bg-gradient-to-br ${col}">${initials}</div>`;
+    }
+
+    /* ── View Switching ── */
+    function switchView(v) {
+      ['v-rank','v-map','v-cat'].forEach(id => document.getElementById(id).classList.add('hidden'));
+      ['tbtn-rank','tbtn-map','tbtn-cat'].forEach(id => { document.getElementById(id).className = 'px-5 py-2.5 rounded-xl text-xs font-bold transition tab-idle'; });
+      if (v === 'ranking') {
+        document.getElementById('v-rank').classList.remove('hidden');
+        document.getElementById('tbtn-rank').className = 'px-5 py-2.5 rounded-xl text-xs font-bold transition tab-active';
+      } else if (v === 'map') {
+        document.getElementById('v-map').classList.remove('hidden');
+        document.getElementById('tbtn-map').className = 'px-5 py-2.5 rounded-xl text-xs font-bold transition tab-active';
+        initMap();
+      } else {
+        document.getElementById('v-cat').classList.remove('hidden');
+        document.getElementById('tbtn-cat').className = 'px-5 py-2.5 rounded-xl text-xs font-bold transition tab-active';
+        renderCatalog(P);
+      }
+    }
+
+    /* ── Ranking Table (Desktop) ── */
+    function renderTable(items) {
+      const tb = document.getElementById('rank-tbody');
+      const mob = document.getElementById('rank-mobile');
+      tb.innerHTML = '';
+      mob.innerHTML = '';
+
+      items.forEach((it, idx) => {
+        const g = getGrade(it.score);
+        const projs = P.filter(p => p.developer_id === it.id);
+        const projBadge = projs.length > 0
+          ? `<button onclick="goMap('${it.id}')" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/15 text-[11px] font-semibold hover:bg-blue-500/20 transition">📍 ${projs.length} ${t('units_label')}</button>`
+          : `<span class="text-[11px] text-slate-600">—</span>`;
+
+        const delta = it.delta_rank || 0;
+        let deltaHtml = '<span class="text-slate-600 font-mono text-[11px]">—</span>';
+        if (delta > 0) deltaHtml = `<span class="text-emerald-400 font-mono text-[11px] font-bold">▲${delta}</span>`;
+        if (delta < 0) deltaHtml = `<span class="text-red-400 font-mono text-[11px] font-bold">▼${Math.abs(delta)}</span>`;
+
+        const rankCls = it.rank <= 3 ? `rank-${it.rank}` : 'rank-n';
+
+        // Desktop row
+        const tr = document.createElement('tr');
+        tr.className = 'row-hover group';
+        tr.innerHTML = `
+          <td class="py-4 px-5 text-center"><div class="rank-badge ${rankCls}">${it.rank}</div></td>
+          <td class="py-4 px-4">
+            <div class="flex items-center gap-3">
+              ${avatarHTML(it.name, idx)}
+              <div>
+                <div class="font-bold text-white text-[13px] group-hover:text-blue-400 transition flex items-center gap-1.5">
+                  ${it.name}
+                  ${it.rank === 1 ? '<span class="crown text-sm">👑</span>' : ''}
+                  ${deltaHtml}
+                </div>
+                <div class="text-[10px] text-slate-600 mt-0.5 font-mono">${it.mentions} упоминаний</div>
+              </div>
+            </div>
+          </td>
+          <td class="py-4 px-4 text-[11px] text-slate-400">${it.region}</td>
+          <td class="py-4 px-4 text-center">${scoreRingSVG(it.score)}</td>
+          <td class="py-4 px-4 text-center">
+            <div class="font-mono text-xs text-slate-300 font-semibold mb-1">${it.sov_percent}%</div>
+            <div class="progress-bar w-16 mx-auto"><div class="progress-fill bg-blue-400" style="width:${it.sov_percent}%"></div></div>
+          </td>
+          <td class="py-4 px-4 text-center">
+            <div class="font-mono text-xs font-semibold mb-1 ${it.recommendation_rate > 60 ? 'text-emerald-400' : 'text-slate-400'}">${it.recommendation_rate}%</div>
+            <div class="progress-bar w-16 mx-auto"><div class="progress-fill ${it.recommendation_rate > 60 ? 'bg-emerald-400' : 'bg-slate-500'}" style="width:${it.recommendation_rate}%"></div></div>
+          </td>
+          <td class="py-4 px-4 text-center">${sparkSVG(it.score)}</td>
+          <td class="py-4 px-4 text-right">
+            <button onclick="openDev(${idx})" class="text-[11px] px-3 py-1.5 rounded-xl bento-sm hover:bg-blue-600 hover:border-blue-500/30 text-slate-400 hover:text-white transition font-semibold">Аудит →</button>
+          </td>
+        `;
+        tb.appendChild(tr);
+
+        // Mobile card
+        const card = document.createElement('div');
+        card.className = 'bento-sm rounded-2xl p-4';
+        card.innerHTML = `
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-3">
+              <div class="rank-badge ${rankCls}">${it.rank}</div>
+              ${avatarHTML(it.name, idx)}
+              <div>
+                <div class="font-bold text-white text-sm flex items-center gap-1.5">
+                  ${it.name} ${it.rank === 1 ? '<span class="crown">👑</span>' : ''} ${deltaHtml}
+                </div>
+                <div class="text-[10px] text-slate-500">${it.region}</div>
+              </div>
+            </div>
+            <span class="inline-block px-2 py-0.5 rounded-lg text-[10px] font-black text-white ${g.cls}">${g.label}</span>
+          </div>
+          <div class="grid grid-cols-4 gap-2 mb-3">
+            <div class="text-center">
+              <div class="text-[9px] text-slate-600 uppercase font-semibold">Score</div>
+              <div class="font-black text-sm font-mono" style="color:${scoreColor(it.score)}">${it.score}</div>
+            </div>
+            <div class="text-center">
+              <div class="text-[9px] text-slate-600 uppercase font-semibold">SoV</div>
+              <div class="font-semibold text-sm font-mono text-slate-300">${it.sov_percent}%</div>
+            </div>
+            <div class="text-center">
+              <div class="text-[9px] text-slate-600 uppercase font-semibold">Рекоменд.</div>
+              <div class="font-semibold text-sm font-mono ${it.recommendation_rate > 60 ? 'text-emerald-400' : 'text-slate-400'}">${it.recommendation_rate}%</div>
+            </div>
+            <div class="text-center">
+              <div class="text-[9px] text-slate-600 uppercase font-semibold">Упомин.</div>
+              <div class="font-semibold text-sm font-mono text-slate-300">${it.mentions}</div>
+            </div>
+          </div>
+          <div class="flex items-center justify-end">
+            <button onclick="openDev(${idx})" class="text-[11px] px-3 py-1.5 rounded-xl bg-blue-600 text-white font-semibold">Аудит →</button>
+          </div>
+        `;
+        mob.appendChild(card);
+      });
+    }
+
+    function filterTable() {
+      const r = document.getElementById('reg-filter').value;
+      renderTable(r === 'all' ? D : D.filter(d => d.region.toLowerCase().includes(r.toLowerCase())));
+    }
+
+    /* ── Map ── */
+    function initMap() {
+      if (!P || P.length === 0) {
+        if (typeof window !== 'undefined' && window.OFFICIAL_PROJECTS) {
+          P = window.OFFICIAL_PROJECTS;
+        }
+      }
+      if (!map) {
+        map = L.map('map-box').setView([35.28, 33.65], 10);
+        const sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: 'Tiles © Esri', maxZoom: 18 }).addTo(map);
+        const street = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', { attribution: 'Tiles © Esri', maxZoom: 18 });
+        L.control.layers({ '🛰️ Спутник': sat, '🗺️ Схема': street }, null, { position: 'topright' }).addTo(map);
+        markersLayer = L.layerGroup().addTo(map);
+      }
+      setTimeout(() => map.invalidateSize(), 200);
+
+      if (markersLayer && P && P.length > 0) {
+        markersLayer.clearLayers();
+        P.forEach(proj => {
+          const coords = proj.coords || (proj.lat && proj.lng ? [proj.lat, proj.lng] : null);
+          if (!coords || isNaN(coords[0]) || isNaN(coords[1])) return;
+
+          const sc = devScore(proj.developer_id);
+          const rank = devRank(proj.developer_id);
+          let bg = 'background:linear-gradient(135deg,#059669,#10B981)';
+          if (sc < 75) bg = 'background:linear-gradient(135deg,#D97706,#FBBF24)';
+          if (sc < 45) bg = 'background:linear-gradient(135deg,#DC2626,#F87171)';
+
+          const icon = L.divIcon({
+            className: '',
+            html: `<div class="map-marker w-10 h-10" style="${bg};box-shadow:0 0 16px rgba(0,0,0,0.5)">${Math.round(sc)}</div>`,
+            iconSize: [40, 40], iconAnchor: [20, 20]
+          });
+
+          const g = getGrade(sc);
+          const popup = `
+            <div style="width:280px;padding:4px;">
+              <img src="${proj.image}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22280%22 height=%22140%22><rect fill=%22%23111827%22 width=%22280%22 height=%22140%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%2364748B%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22Inter%22 font-size=%2214%22>${proj.name}</text></svg>'" style="width:100%;height:140px;object-fit:cover;border-radius:14px;margin-bottom:10px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                <div style="font-size:10px;text-transform:uppercase;font-weight:700;color:#38BDF8;letter-spacing:0.05em;">${proj.developer_name} · ${proj.region}</div>
+                <span style="font-size:9px;font-weight:900;color:#fff;padding:2px 6px;border-radius:6px;background:linear-gradient(135deg,${sc>=75?'#059669,#10B981':sc>=45?'#D97706,#FBBF24':'#DC2626,#F87171'})">${g.label}</span>
+              </div>
+              <div style="font-size:15px;font-weight:800;color:#fff;margin-bottom:4px;">${proj.name}</div>
+              <div style="font-size:13px;font-weight:800;color:#10B981;font-family:'JetBrains Mono',monospace;margin-bottom:12px;">Старт: ${proj.price_from}</div>
+              <button onclick="openProj('${proj.id}')" style="width:100%;padding:8px;background:linear-gradient(135deg,#2563EB,#4F46E5);color:#fff;border:none;border-radius:12px;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 12px rgba(37,99,235,0.3);" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">Запросить презентацию →</button>
+            </div>
+          `;
+          L.marker(coords, { icon }).addTo(markersLayer).bindPopup(popup, { maxWidth: 300 });
+        });
+      }
+    }
+
+    function goMap(devId) {
+      switchView('map');
+      if (!P || P.length === 0) {
+        if (typeof window !== 'undefined' && window.OFFICIAL_PROJECTS) P = window.OFFICIAL_PROJECTS;
+      }
+      const p = P.find(x => x.developer_id === devId);
+      if (p && map) {
+        const coords = p.coords || (p.lat && p.lng ? [p.lat, p.lng] : null);
+        if (coords && !isNaN(coords[0])) {
+          setTimeout(() => map.setView(coords, 13), 250);
+        }
+      }
+    }
+
+    /* ── Catalog ── */
+    function renderCatalog(items) {
+      if (!items || items.length === 0) {
+        if (typeof window !== 'undefined' && window.OFFICIAL_PROJECTS) {
+          P = window.OFFICIAL_PROJECTS;
+          items = P;
+        }
+      }
+      const grid = document.getElementById('cat-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      if (!items || !items.length) return;
+      items.forEach(proj => {
+        const sc = devScore(proj.developer_id);
+        const rank = devRank(proj.developer_id);
+        const g = getGrade(sc);
+        const isLeader = rank <= 3;
+        const c = document.createElement('div');
+        c.className = 'catalog-card bento rounded-3xl overflow-hidden flex flex-col';
+        c.innerHTML = `
+          <div class="relative h-56 overflow-hidden">
+            <img src="${proj.image}" alt="${proj.name}" class="w-full h-full object-cover" onerror="this.style.background='linear-gradient(135deg,#111827,#1A2035)';this.alt='Фото загружается...'">
+            <div class="absolute inset-0 bg-gradient-to-t from-surface-950/90 via-surface-950/20 to-transparent"></div>
+            ${isLeader ? `<div class="leader-ribbon">🏆 ${t('card_top')}-${rank} AI</div>` : ''}
+            <div class="absolute top-3 right-3">
+              <div class="flex items-center gap-1.5">
+                <span class="${g.cls} px-2 py-0.5 rounded-lg text-[10px] font-black text-white">${g.label}</span>
+                <span class="bento-sm px-2 py-0.5 rounded-lg text-[10px] font-black font-mono backdrop-blur-md" style="color:${scoreColor(sc)}">${Math.round(sc)}</span>
+              </div>
+            </div>
+            <div class="absolute bottom-3 left-4 right-4">
+              <div class="text-[10px] font-bold text-blue-400 uppercase tracking-wider">${proj.developer_name} · ${proj.region}</div>
+              <div class="text-base font-bold text-white leading-tight mt-0.5">${proj.name}</div>
+              <div class="text-[10px] text-slate-400 mt-0.5">${proj.type}</div>
+            </div>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <div class="space-y-1.5 mb-4">
+                ${proj.features.slice(0, 3).map(f => `<div class="flex items-start gap-2 text-[11px] text-slate-300"><span class="text-emerald-400 mt-px flex-shrink-0">✓</span><span>${f}</span></div>`).join('')}
+              </div>
+            </div>
+            <div class="pt-4 border-t border-white/[0.04] flex items-center justify-between">
+              <div>
+                <span class="text-[9px] text-slate-600 uppercase tracking-wider block font-semibold">${t('card_price_from')}</span>
+                <span class="text-emerald-400 font-black text-lg font-mono">${proj.price_from}</span>
+              </div>
+              <button onclick="openProj('${proj.id}')" class="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl text-[11px] font-bold transition shadow-lg shadow-blue-600/20 hover:-translate-y-0.5">${t('card_pres')}</button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(c);
+      });
+    }
+
+    function filterCatalog() {
+      const v = document.getElementById('cat-filter').value;
+      renderCatalog(v === 'all' ? P : P.filter(p => p.developer_name === v));
+    }
+
+    /* ── Modals ── */
+    function openDev(idx) {
+      const it = D[idx]; if (!it) return;
+      const g = getGrade(it.score);
+      document.getElementById('md-grade').className = `w-14 h-14 rounded-2xl flex items-center justify-center font-black text-white text-base ${g.cls}`;
+      document.getElementById('md-grade').innerText = g.label;
+      document.getElementById('md-name').innerText = it.name;
+      document.getElementById('md-region').innerText = `${it.region} · ${g.desc}`;
+      document.getElementById('md-score').innerText = it.score;
+      document.getElementById('md-sov').innerText = it.sov_percent + '%';
+      document.getElementById('md-rec').innerText = it.recommendation_rate + '%';
+      document.getElementById('md-ment').innerText = it.mentions;
+      document.getElementById('md-pros').innerText = it.summary_pros;
+      document.getElementById('md-risks').innerText = it.summary_risks;
+      // Animate progress bars
+      setTimeout(() => {
+        document.querySelector('#md-score-bar .progress-fill').style.width = it.score + '%';
+        document.querySelector('#md-sov-bar .progress-fill').style.width = it.sov_percent + '%';
+        document.querySelector('#md-rec-bar .progress-fill').style.width = it.recommendation_rate + '%';
+        document.querySelector('#md-ment-bar .progress-fill').style.width = Math.min(100, (it.mentions / 30) * 100) + '%';
+      }, 50);
+      document.getElementById('md-map-btn').onclick = () => { closeMod('mod-dev'); goMap(it.id); };
+      document.getElementById('mod-dev').classList.remove('hidden');
+    }
+
+    function openProj(projId) {
+      const p = P.find(x => x.id === projId); if (!p) return;
+      document.getElementById('pm-dev').innerText = p.developer_name;
+      document.getElementById('pm-reg').innerText = p.region;
+      document.getElementById('pm-title').innerText = p.name;
+      document.getElementById('pm-price').innerText = `Старт: ${p.price_from}`;
+      document.getElementById('pm-desc').innerText = p.type;
+      document.getElementById('pm-feat').innerHTML = p.features.map(f => `<div class="flex items-start gap-2 text-slate-300"><span class="text-emerald-400">✓</span>${f}</div>`).join('');
+      document.getElementById('inq-ok').classList.add('hidden');
+      document.getElementById('mod-proj').classList.remove('hidden');
+    }
+
+    function closeMod(id) { document.getElementById(id).classList.add('hidden'); }
+
+    /* ── Messenger Selector ── */
+    function setMsg(el, group) {
+      el.parentElement.querySelectorAll('.msg-btn').forEach(b => { b.classList.remove('active'); b.classList.add('text-slate-400'); });
+      el.classList.add('active'); el.classList.remove('text-slate-400');
+    }
+
+    /* ── Telegram Lead Dispatcher Configuration ── */
+    const TG_CONFIG = {
+      bot_token: "8813658862:AAHZ2oGocDHmpt9Ndl3FMeQ5jg6V7G4gPEg", // @realtyagents_bot
+      chat_ids: ["759218984", "6881547934"] // @makler_cy, @tarasov_cy
+    };
+
+    async function sendTelegramLead(text) {
+      if (!TG_CONFIG.bot_token || !TG_CONFIG.chat_ids.length) return;
+      for (const chatId of TG_CONFIG.chat_ids) {
+        try {
+          await fetch(`https://api.telegram.org/bot${TG_CONFIG.bot_token}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: chatId,
+              text: text,
+              parse_mode: 'HTML'
+            })
+          });
+        } catch (err) {
+          console.error('Ошибка отправки лида в Telegram:', err);
+        }
+      }
+    }
+
+    /* ── Form Handlers ── */
+    function handleB2C(e) {
+      e.preventDefault();
+      const val = document.getElementById('b2c-in').value;
+      sendTelegramLead(`🔥 <b>Новая B2C заявка (Подборка новостроек)</b>\n\n👤 Контакт: <code>${val}</code>\n📍 Источник: Форма инвестора (Топ-5 проверенных)\n📅 Время: ${new Date().toLocaleString('ru')}`);
+      document.getElementById('b2c-ok').classList.remove('hidden');
+      document.getElementById('b2c-in').value = '';
+    }
+
+    function handleB2B(e) {
+      e.preventDefault();
+      const val = document.getElementById('b2b-in').value;
+      sendTelegramLead(`🏢 <b>Новая B2B заявка (GEO-Аудит застройщика)</b>\n\n💼 Компания и контакт: <code>${val}</code>\n🎯 Запрос: Оптимизация присутствия в LLM\n📅 Время: ${new Date().toLocaleString('ru')}`);
+      document.getElementById('b2b-ok').classList.remove('hidden');
+      document.getElementById('b2b-in').value = '';
+    }
+
+    function handleInq(e) {
+      e.preventDefault();
+      const val = document.getElementById('inq-in').value;
+      const projTitle = document.getElementById('pm-title').innerText;
+      const devName = document.getElementById('pm-dev').innerText;
+      sendTelegramLead(`🏛️ <b>Запрос презентации объекта</b>\n\n🏢 Комплекс: <b>${projTitle}</b> (${devName})\n👤 Контакт: <code>${val}</code>\n📅 Время: ${new Date().toLocaleString('ru')}`);
+      document.getElementById('inq-ok').classList.remove('hidden');
+      document.getElementById('inq-in').value = '';
+    }
+
+    /* ── Animated Counter ── */
+    function animateCounter(el, target, duration = 1200) {
+      const start = performance.now();
+      const from = 0;
+      function update(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+        el.textContent = Math.round(from + (target - from) * eased);
+        if (progress < 1) requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+    }
+
+    /* ── Init ── */
+    window.onload = function() {
+      if (window.RANKINGS_DATA) {
+        const data = window.RANKINGS_DATA;
+        D = data.rankings || [];
+        document.getElementById('header-date').innerText = data.updated_at || 'Nov 2026';
+        setLang(currentLang);
+        const countEl = document.getElementById('stat-count');
+        countEl.setAttribute('data-target', D.length);
+        animateCounter(countEl, D.length);
+        if (D.length) {
+          document.getElementById('stat-leader').innerHTML = `<span class="crown">👑</span> ${D[0].name}`;
+        }
+        renderTable(D);
+      }
+      if (window.OFFICIAL_PROJECTS) {
+        P = window.OFFICIAL_PROJECTS;
+        const devs = [...new Set(P.map(p => p.developer_name))];
+        const sel = document.getElementById('cat-filter');
+        devs.forEach(d => { const o = document.createElement('option'); o.value = d; o.text = d; sel.add(o); });
+      }
+    };
+  </script>
+
+  <style>
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: none; } }
+  </style>
+</body>
+</html>

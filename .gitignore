@@ -1,0 +1,24 @@
+# Chrome user data and sessions
+browser_data/
+debug/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+.venv/
+env/
+
+# Temporary test screenshots
+*.png
+*.jpg
+*.jpeg
+catalog_clean.png
+full_screenshot.png
+test_screenshot.png
+
+# Scraped temp files
+noyanlar_9_scraped.json
+temp_*
+scratch_*
