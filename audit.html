@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer AI Visibility Audit & Plans — GeoEstate Intelligence</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+          colors: {
+            surface: { 950: '#070A12', 900: '#0B0F19', 850: '#0F1523', 800: '#141C2E', 700: '#1E293B', 600: '#334155' }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body { background-color: #070A12; color: #E2E8F0; overflow-x: hidden; }
+    .bento { background: rgba(15, 21, 35, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.06); }
+    .bento:hover { border-color: rgba(255,255,255,0.12); }
+    .bento-highlight { background: linear-gradient(180deg, rgba(30, 41, 69, 0.8) 0%, rgba(15, 21, 35, 0.9) 100%); border: 1px solid rgba(99, 102, 241, 0.35); box-shadow: 0 0 35px rgba(99, 102, 241, 0.15); }
+    .bento-sm { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.05); }
+    .grad-text { background: linear-gradient(135deg, #60A5FA 0%, #A78BFA 50%, #F472B6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .tab-active { background: #2563EB; color: #FFFFFF; }
+    .tab-idle { color: #94A3B8; }
+    .tab-idle:hover { color: #FFFFFF; background: rgba(255,255,255,0.05); }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-blue-600/30 selection:text-white">
+
+  <!-- Header -->
+  <header class="border-b border-white/[0.06] sticky top-0 z-40 bg-surface-950/80 backdrop-blur-xl">
+    <div class="max-w-[1300px] mx-auto px-5 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-black text-white text-sm shadow-lg shadow-blue-600/25 relative group-hover:scale-105 transition-transform">
+          <span class="relative z-10">G</span>
+          <div class="absolute inset-0 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 animate-ping opacity-20"></div>
+        </div>
+        <div class="leading-tight">
+          <span class="text-[15px] font-bold tracking-tight text-white">GeoEstate</span>
+          <span class="ml-1.5 text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-indigo-500/15 text-indigo-400 border border-indigo-500/20 align-middle">Intelligence</span>
+          <p class="text-[10px] text-slate-500 font-medium" id="hdr-sub">AI Visibility & Audit</p>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-4">
+        <!-- Language Switcher -->
+        <div class="flex items-center gap-0.5 bento-sm p-1 rounded-xl text-[10px] font-bold">
+          <button id="lang-ru" onclick="setLang('ru')" class="px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">RU</button>
+          <button id="lang-en" onclick="setLang('en')" class="px-2 py-1 rounded-lg bg-blue-600 text-white transition">EN</button>
+          <button id="lang-tr" onclick="setLang('tr')" class="px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">TR</button>
+        </div>
+
+        <a href="index.html" class="text-[11px] font-semibold px-3.5 py-2 rounded-xl bento-sm text-slate-300 hover:text-white hover:bg-white/[0.05] transition flex items-center gap-1.5">
+          <span id="btn-back">← Back to Rankings</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="pt-14 pb-12 px-5 max-w-[1300px] mx-auto w-full text-center">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bento-sm text-[11px] text-slate-400 mb-5">
+      <span class="text-indigo-400 font-bold">GEO / LLMO</span>
+      <span class="w-[3px] h-[3px] rounded-full bg-slate-600"></span>
+      <span id="hero-badge">AI Presence Optimization for Real Estate</span>
+    </div>
+
+    <h1 id="hero-title" class="text-3xl sm:text-5xl font-black tracking-tight text-white leading-[1.15] max-w-3xl mx-auto mb-4">
+      Turn AI Search into Your <span class="grad-text">Direct Sales Channel</span>
+    </h1>
+    <p id="hero-desc" class="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+      When high-net-worth buyers ask ChatGPT, Perplexity, or Gemini where to invest, does AI recommend your developments or give leads to your competitors? Find the gaps, remove stop-factors, and secure Top-3 presence.
+    </p>
+  </section>
+
+  <!-- Pricing Cards Bento Grid -->
+  <main class="max-w-[1300px] mx-auto w-full px-5 pb-20">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+      
+      <!-- Plan 1: AI Express Snapshot -->
+      <div class="bento rounded-3xl p-7 flex flex-col justify-between relative transition-all duration-300 hover:-translate-y-1">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20" id="p1-badge">Fast Diagnostics</span>
+            <span class="text-[11px] text-slate-400 font-medium" id="p1-time">⏱️ 24–48 hours</span>
+          </div>
+
+          <h3 class="text-2xl font-bold text-white" id="p1-title">AI Express Snapshot</h3>
+          <p class="text-xs text-slate-400 mt-2 mb-6" id="p1-desc">Instant independent verification of your brand visibility and critical AI stop-factors.</p>
+
+          <div class="flex items-baseline gap-2 mb-6 pb-6 border-b border-white/[0.06]">
+            <span class="text-4xl font-black text-white font-mono">€99</span>
+            <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider" id="p1-type">One-time audit</span>
+          </div>
+
+          <div class="space-y-3 mb-8 text-xs text-slate-300">
+            <div class="flex items-start gap-2.5">
+              <span class="text-emerald-400 font-bold">✓</span>
+              <span id="p1-f1"><strong>10 Core Prompts Tested:</strong> Evaluated in ChatGPT & Perplexity (regional buyers, sea-view villas, brand safety).</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-emerald-400 font-bold">✓</span>
+              <span id="p1-f2"><strong>Shortlist & Rank Position:</strong> Objective check if your brand is recommended and at what position.</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-emerald-400 font-bold">✓</span>
+              <span id="p1-f3"><strong>Top Stop-Factor Detection:</strong> Exact links to sources where AI found negative signals (Trustpilot, complaints, forums).</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-emerald-400 font-bold">✓</span>
+              <span id="p1-f4"><strong>Executive Summary (2–3 pages PDF):</strong> Raw screenshots + 3 key insights where you are losing buyers right now.</span>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="openOrderModal('AI Express Snapshot (€99)')" class="w-full py-3 px-4 rounded-xl font-bold text-xs bg-surface-800 hover:bg-surface-700 text-white border border-white/[0.08] hover:border-white/[0.2] transition shadow-md" id="p1-btn">
+          Order Express Snapshot — €99
+        </button>
+      </div>
+
+      <!-- Plan 2: Full AI Visibility Audit & Roadmap (FEATURED) -->
+      <div class="bento-highlight rounded-3xl p-7 flex flex-col justify-between relative transition-all duration-300 hover:-translate-y-1 relative">
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-lg shadow-blue-500/30">
+          <span id="p2-star">⭐ Most Popular / Deep Strategy</span>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-4 mt-2">
+            <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/30" id="p2-badge">Full Investigation</span>
+            <span class="text-[11px] text-indigo-300 font-medium" id="p2-time">⏱️ 5–7 business days</span>
+          </div>
+
+          <h3 class="text-2xl font-bold text-white" id="p2-title">Full Visibility Audit & Roadmap</h3>
+          <p class="text-xs text-slate-300 mt-2 mb-6" id="p2-desc">Deep comparative intelligence, source-level discovery, technical site audit, and actionable 90-day roadmap.</p>
+
+          <div class="flex items-baseline gap-2 mb-6 pb-6 border-b border-indigo-500/20">
+            <span class="text-4xl font-black text-white font-mono">€300</span>
+            <span class="text-xs text-indigo-300 font-semibold uppercase tracking-wider" id="p2-type">One-time deep audit</span>
+          </div>
+
+          <div class="space-y-3 mb-8 text-xs text-slate-200">
+            <div class="flex items-start gap-2.5">
+              <span class="text-emerald-400 font-bold">✓</span>
+              <span id="p2-f1"><strong>25–30 Buyer Scenarios:</strong> Matrix testing across ChatGPT Search, Perplexity Pro, Google Gemini & Claude.</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-emerald-400 font-bold">✓</span>
+              <span id="p2-f2"><strong>Competitive Gap Analysis:</strong> Why AI favors Döveç / NorthernLAND and what digital footprint is missing.</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-emerald-400 font-bold">✓</span>
+              <span id="p2-f3"><strong>Authority Hubs Audit:</strong> Checking brand visibility on uinvestgroup, NORTHEA, satisofisi, cyprus-faq, realting.</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-emerald-400 font-bold">✓</span>
+              <span id="p2-f4"><strong>Technical Website Audit for LLM:</strong> Robots.txt crawler permissions and Schema.org project microdata check.</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-emerald-400 font-bold">✓</span>
+              <span id="p2-f5"><strong>3-Month Action Roadmap:</strong> Step-by-step prioritized action plan to displace competitors and rank #1.</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-emerald-400 font-bold">✓</span>
+              <span id="p2-f6"><strong>Presentation Report (15–20 pages PDF) + 30-min Zoom</strong> briefing with your management team.</span>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="openOrderModal('Full AI Visibility Audit & Roadmap (€300)')" class="w-full py-3.5 px-4 rounded-xl font-bold text-xs bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white transition shadow-lg shadow-blue-600/30 hover:scale-[1.01]" id="p2-btn">
+          Order Full Audit & Roadmap — €300
+        </button>
+      </div>
+
+      <!-- Plan 3: GEO Strategy & Monthly Retainer -->
+      <div class="bento rounded-3xl p-7 flex flex-col justify-between relative transition-all duration-300 hover:-translate-y-1">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20" id="p3-badge">Turnkey Retainer</span>
+            <span class="text-[11px] text-slate-400 font-medium" id="p3-time">🔄 Monthly ongoing</span>
+          </div>
+
+          <h3 class="text-2xl font-bold text-white" id="p3-title">GEO Strategy & Monthly Retainer</h3>
+          <p class="text-xs text-slate-400 mt-2 mb-6" id="p3-desc">We act as your AI presence architects, directing implementation, writing technical specs, and verifying AI rankings.</p>
+
+          <div class="flex items-baseline gap-2 mb-6 pb-6 border-b border-white/[0.06]">
+            <span class="text-4xl font-black text-white font-mono">€500</span>
+            <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider" id="p3-type">per month</span>
+          </div>
+
+          <div class="space-y-3 mb-8 text-xs text-slate-300">
+            <div class="flex items-start gap-2.5">
+              <span class="text-purple-400 font-bold">✓</span>
+              <span id="p3-f1"><strong>Monthly Sprint Roadmap:</strong> 2–3 priority milestones (e.g. Month 1: Schema.org; Month 2: Catalogs; Month 3: Reviews).</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-purple-400 font-bold">✓</span>
+              <span id="p3-f2"><strong>Ready Technical Specs (ТЗ):</strong> Turnkey JSON-LD microdata code for IT & copywriting briefs for marketing.</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-purple-400 font-bold">✓</span>
+              <span id="p3-f3"><strong>Quality Control (QC):</strong> Verifying structured data deployment and live crawler acceptance.</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-purple-400 font-bold">✓</span>
+              <span id="p3-f4"><strong>Monthly AI Benchmark Re-Test:</strong> "Before vs After" tracking of Share of Voice and direct recommendations.</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-purple-400 font-bold">✓</span>
+              <span id="p3-f5"><strong>Executive Monthly Report:</strong> Tangible progress overview for owners and marketing directors.</span>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="openOrderModal('GEO Strategy & Monthly Retainer (€500/mo)')" class="w-full py-3 px-4 rounded-xl font-bold text-xs bg-purple-600 hover:bg-purple-500 text-white transition shadow-lg shadow-purple-600/20" id="p3-btn">
+          Start Monthly Retainer — €500 / mo
+        </button>
+      </div>
+
+    </div>
+
+    <!-- FAQ / Why GEO matters -->
+    <div class="mt-16 bento rounded-3xl p-8 max-w-4xl mx-auto">
+      <h3 class="text-xl font-bold text-white mb-6 text-center" id="faq-title">Frequently Asked Questions for Developers</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-300">
+        <div class="space-y-2">
+          <strong class="text-white text-sm block" id="faq-q1">Why do international buyers use AI to choose developers?</strong>
+          <p class="text-slate-400 leading-relaxed" id="faq-a1">Traditional search engines are overwhelmed by broker ads and SEO spam. High-net-worth investors now ask ChatGPT and Perplexity to filter out developers with delays or lawsuits and recommend only secure projects.</p>
+        </div>
+        <div class="space-y-2">
+          <strong class="text-white text-sm block" id="faq-q2">How fast do AI search engines update their recommendations?</strong>
+          <p class="text-slate-400 leading-relaxed" id="faq-a2">Perplexity and ChatGPT Search use live search crawling. Once authority sources and technical microdata are updated, noticeable improvements in recommendation rates appear in 2 to 4 weeks.</p>
+        </div>
+        <div class="space-y-2">
+          <strong class="text-white text-sm block" id="faq-q3">Can we upgrade from Express (€99) to Full Audit (€300)?</strong>
+          <p class="text-slate-400 leading-relaxed" id="faq-a3">Yes! If you start with the €99 Express Snapshot and decide to get the Full Strategy Roadmap within 14 days, you only pay the difference (€201).</p>
+        </div>
+        <div class="space-y-2">
+          <strong class="text-white text-sm block" id="faq-q4">What is required from our team for the Monthly Retainer?</strong>
+          <p class="text-slate-400 leading-relaxed" id="faq-a4">We prepare ready-to-paste code for your webmaster and exact publishing briefs for your content team. Your internal workload is typically under 2 hours per sprint.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/[0.04] py-8 text-center text-xs text-slate-600">
+    <div class="max-w-[1300px] mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span class="text-slate-400">GeoEstate Intelligence · AI Trust & Visibility Benchmark</span>
+      </div>
+      <div>
+        <a href="index.html" class="text-blue-400 hover:text-blue-300 transition" id="ftr-back">← Back to Dashboard</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════ ORDER MODAL ═══════════════════════ -->
+  <div id="order-modal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 hidden flex items-center justify-center p-4" onclick="if(event.target===this)closeOrderModal()">
+    <div class="bento max-w-lg w-full rounded-3xl p-7 relative" style="animation: fadeIn 0.25s ease-out">
+      <button onclick="closeOrderModal()" class="absolute top-5 right-5 w-8 h-8 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] flex items-center justify-center text-slate-400 hover:text-white text-lg transition">✕</button>
+
+      <div class="mb-4">
+        <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20" id="ord-badge">Service Order</span>
+        <h3 class="text-xl font-bold text-white mt-2" id="ord-title">Request AI Audit</h3>
+        <p class="text-xs text-slate-400 mt-1" id="ord-sub">Leave your company contact details and we will contact you within 15 minutes.</p>
+      </div>
+
+      <form onsubmit="handleAuditOrder(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-[10px] uppercase tracking-wider text-slate-400 font-semibold mb-1" id="lbl-sel-plan">Selected Plan</label>
+          <input type="text" id="ord-plan" readonly class="w-full bg-surface-900 border border-white/[0.08] text-xs font-bold text-blue-400 rounded-xl px-3.5 py-2.5 cursor-not-allowed">
+        </div>
+
+        <div>
+          <label class="block text-[10px] uppercase tracking-wider text-slate-400 font-semibold mb-1" id="lbl-company">Company / Brand Name</label>
+          <input type="text" id="ord-company" required placeholder="e.g. Döveç Group, Carrington, etc." class="w-full bg-surface-800 border border-white/[0.06] text-xs rounded-xl px-3.5 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 transition">
+        </div>
+
+        <div>
+          <label class="block text-[10px] uppercase tracking-wider text-slate-400 font-semibold mb-1" id="lbl-contact">Contact (Telegram @username, WhatsApp, Phone)</label>
+          <input type="text" id="ord-contact" required placeholder="@username or +90 ..." class="w-full bg-surface-800 border border-white/[0.06] text-xs rounded-xl px-3.5 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 transition">
+        </div>
+
+        <div>
+          <label class="block text-[10px] uppercase tracking-wider text-slate-400 font-semibold mb-1" id="lbl-site">Website / Key Project URL (Optional)</label>
+          <input type="text" id="ord-site" placeholder="https://..." class="w-full bg-surface-800 border border-white/[0.06] text-xs rounded-xl px-3.5 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 transition">
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-blue-600/30" id="btn-submit-order">
+          Submit Audit Request
+        </button>
+
+        <p id="ord-ok" class="text-xs text-emerald-400 text-center hidden flex items-center justify-center gap-1.5 mt-2">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          <span id="ord-ok-txt">Request received! Our specialist will get in touch with you shortly.</span>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    /* ── Telegram Lead Dispatcher Configuration ── */
+    const TG_CONFIG = {
+      bot_token: "8813658862:AAHZ2oGocDHmpt9Ndl3FMeQ5jg6V7G4gPEg",
+      chat_ids: ["759218984", "6881547934"]
+    };
+
+    async function sendTelegramLead(text) {
+      if (!TG_CONFIG.bot_token || !TG_CONFIG.chat_ids.length) return;
+      for (const chatId of TG_CONFIG.chat_ids) {
+        try {
+          await fetch(`https://api.telegram.org/bot${TG_CONFIG.bot_token}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: chatId, text: text, parse_mode: 'HTML' })
+          });
+        } catch (err) {
+          console.error('Telegram lead error:', err);
+        }
+      }
+    }
+
+    function openOrderModal(planName) {
+      document.getElementById('ord-plan').value = planName;
+      document.getElementById('ord-ok').classList.add('hidden');
+      document.getElementById('order-modal').classList.remove('hidden');
+    }
+
+    function closeOrderModal() {
+      document.getElementById('order-modal').classList.add('hidden');
+    }
+
+    function handleAuditOrder(e) {
+      e.preventDefault();
+      const plan = document.getElementById('ord-plan').value;
+      const company = document.getElementById('ord-company').value;
+      const contact = document.getElementById('ord-contact').value;
+      const site = document.getElementById('ord-site').value || 'Not specified';
+
+      const msg = `🚀 <b>НОВАЯ ЗАЯВКА НА АУДИТ / ТАРИФ GEOESTATE</b>\n\n` +
+                  `📦 <b>Тариф:</b> ${plan}\n` +
+                  `🏢 <b>Компания:</b> ${company}\n` +
+                  `👤 <b>Контакт:</b> <code>${contact}</code>\n` +
+                  `🌐 <b>Сайт/Проект:</b> ${site}\n` +
+                  `📅 <b>Время:</b> ${new Date().toLocaleString('ru')}`;
+
+      sendTelegramLead(msg);
+      document.getElementById('ord-ok').classList.remove('hidden');
+      setTimeout(() => {
+        document.getElementById('ord-company').value = '';
+        document.getElementById('ord-contact').value = '';
+        document.getElementById('ord-site').value = '';
+      }, 500);
+    }
+
+    /* ── Multi-Language I18N ── */
+    const I18N = {
+      en: {
+        hdr_sub: "AI Visibility & Audit",
+        btn_back: "← Back to Rankings",
+        hero_badge: "AI Presence Optimization for Real Estate",
+        hero_title: 'Turn AI Search into Your <span class="grad-text">Direct Sales Channel</span>',
+        hero_desc: "When high-net-worth buyers ask ChatGPT, Perplexity, or Gemini where to invest, does AI recommend your developments or give leads to your competitors? Find the gaps, remove stop-factors, and secure Top-3 presence.",
+        p1_badge: "Fast Diagnostics",
+        p1_time: "⏱️ 24–48 hours",
+        p1_title: "AI Express Snapshot",
+        p1_desc: "Instant independent verification of your brand visibility and critical AI stop-factors.",
+        p1_type: "One-time audit",
+        p1_f1: "<strong>10 Core Prompts Tested:</strong> Evaluated in ChatGPT & Perplexity (regional buyers, sea-view villas, brand safety).",
+        p1_f2: "<strong>Shortlist & Rank Position:</strong> Objective check if your brand is recommended and at what position.",
+        p1_f3: "<strong>Top Stop-Factor Detection:</strong> Exact links to sources where AI found negative signals (Trustpilot, complaints, forums).",
+        p1_f4: "<strong>Executive Summary (2–3 pages PDF):</strong> Raw screenshots + 3 key insights where you are losing buyers right now.",
+        p1_btn: "Order Express Snapshot — €99",
+        p2_star: "⭐ Most Popular / Deep Strategy",
+        p2_badge: "Full Investigation",
+        p2_time: "⏱️ 5–7 business days",
+        p2_title: "Full Visibility Audit & Roadmap",
+        p2_desc: "Deep comparative intelligence, source-level discovery, technical site audit, and actionable 90-day roadmap.",
+        p2_type: "One-time deep audit",
+        p2_f1: "<strong>25–30 Buyer Scenarios:</strong> Matrix testing across ChatGPT Search, Perplexity Pro, Google Gemini & Claude.",
+        p2_f2: "<strong>Competitive Gap Analysis:</strong> Why AI favors Döveç / NorthernLAND and what digital footprint is missing.",
+        p2_f3: "<strong>Authority Hubs Audit:</strong> Checking brand visibility on uinvestgroup, NORTHEA, satisofisi, cyprus-faq, realting.",
+        p2_f4: "<strong>Technical Website Audit for LLM:</strong> Robots.txt crawler permissions and Schema.org project microdata check.",
+        p2_f5: "<strong>3-Month Action Roadmap:</strong> Step-by-step prioritized action plan to displace competitors and rank #1.",
+        p2_f6: "<strong>Presentation Report (15–20 pages PDF) + 30-min Zoom</strong> briefing with your management team.",
+        p2_btn: "Order Full Audit & Roadmap — €300",
+        p3_badge: "Turnkey Retainer",
+        p3_time: "🔄 Monthly ongoing",
+        p3_title: "GEO Strategy & Monthly Retainer",
+        p3_desc: "We act as your AI presence architects, directing implementation, writing technical specs, and verifying AI rankings.",
+        p3_type: "per month",
+        p3_f1: "<strong>Monthly Sprint Roadmap:</strong> 2–3 priority milestones (e.g. Month 1: Schema.org; Month 2: Catalogs; Month 3: Reviews).",
+        p3_f2: "<strong>Ready Technical Specs (ТЗ):</strong> Turnkey JSON-LD microdata code for IT & copywriting briefs for marketing.",
+        p3_f3: "<strong>Quality Control (QC):</strong> Verifying structured data deployment and live crawler acceptance.",
+        p3_f4: "<strong>Monthly AI Benchmark Re-Test:</strong> 'Before vs After' tracking of Share of Voice and direct recommendations.",
+        p3_f5: "<strong>Executive Monthly Report:</strong> Tangible progress overview for owners and marketing directors.",
+        p3_btn: "Start Monthly Retainer — €500 / mo",
+        faq_title: "Frequently Asked Questions for Developers",
+        faq_q1: "Why do international buyers use AI to choose developers?",
+        faq_a1: "Traditional search engines are overwhelmed by broker ads and SEO spam. High-net-worth investors now ask ChatGPT and Perplexity to filter out developers with delays or lawsuits and recommend only secure projects.",
+        faq_q2: "How fast do AI search engines update their recommendations?",
+        faq_a2: "Perplexity and ChatGPT Search use live search crawling. Once authority sources and technical microdata are updated, noticeable improvements in recommendation rates appear in 2 to 4 weeks.",
+        faq_q3: "Can we upgrade from Express (€99) to Full Audit (€300)?",
+        faq_a3: "Yes! If you start with the €99 Express Snapshot and decide to get the Full Strategy Roadmap within 14 days, you only pay the difference (€201).",
+        faq_q4: "What is required from our team for the Monthly Retainer?",
+        faq_a4: "We prepare ready-to-paste code for your webmaster and exact publishing briefs for your content team. Your internal workload is typically under 2 hours per sprint.",
+        ftr_back: "← Back to Dashboard",
+        ord_badge: "Service Order",
+        ord_title: "Request AI Audit",
+        ord_sub: "Leave your company contact details and we will contact you within 15 minutes.",
+        lbl_sel_plan: "Selected Plan",
+        lbl_company: "Company / Brand Name",
+        lbl_contact: "Contact (Telegram @username, WhatsApp, Phone)",
+        lbl_site: "Website / Key Project URL (Optional)",
+        btn_submit_order: "Submit Audit Request",
+        ord_ok_txt: "Request received! Our specialist will get in touch with you shortly."
+      },
+      ru: {
+        hdr_sub: "AI-видимость и аудит",
+        btn_back: "← Назад к рейтингу",
+        hero_badge: "GEO / LLMO — оптимизация застройщиков в нейросетях",
+        hero_title: 'Превратите поиск в нейросетях в <span class="grad-text">прямой канал продаж</span>',
+        hero_desc: "Когда состоятельные покупатели спрашивают ChatGPT, Perplexity или Gemini, куда инвестировать — советует ли ИИ ваши объекты или отдает клиентов конкурентам? Найдите пробелы, устраните стоп-факторы и войдите в Топ-3.",
+        p1_badge: "Экспресс-диагностика",
+        p1_time: "⏱️ 24–48 часов",
+        p1_title: "AI Express Snapshot",
+        p1_desc: "Быстрая независимая проверка присутствия бренда и выявление критических стоп-факторов в нейросетях.",
+        p1_type: "Разовый экспресс-аудит",
+        p1_f1: "<strong>Тест по 10 главным запросам:</strong> в ChatGPT и Perplexity (региональные покупки, виллы у моря, надежность бренда).",
+        p1_f2: "<strong>Фиксация текущей позиции:</strong> попадает ли бренд в шортлист рекомендаций и на каком месте стоит.",
+        p1_f3: "<strong>Обнаружение стоп-факторов:</strong> точные ссылки на источники, откуда AI взял негатив (Trustpilot, жалобы, форумы).",
+        p1_f4: "<strong>Краткий отчет-справка (2–3 стр. PDF):</strong> реальные скриншоты + 3 главных вывода, где вы теряете лидов прямо сейчас.",
+        p1_btn: "Заказать Express Snapshot — €99",
+        p2_star: "⭐ Самый популярный / Глубокая стратегия",
+        p2_badge: "Полное исследование",
+        p2_time: "⏱️ 5–7 рабочих дней",
+        p2_title: "Full Visibility Audit & Roadmap",
+        p2_desc: "Глубокая разведка по источникам, аудит конкурентов, техническая проверка сайта и дорожная карта на 90 дней.",
+        p2_type: "Разовый глубокий аудит",
+        p2_f1: "<strong>25–30 сценариев покупателей:</strong> матричное тестирование в ChatGPT Search, Perplexity Pro, Google Gemini и Claude.",
+        p2_f2: "<strong>Анализ конкурентов (Competitive Gap):</strong> почему AI ставит на 1-е место Döveç или NorthernLAND и чего не хватает вашему бренду.",
+        p2_f3: "<strong>Аудит авторитетных хабов:</strong> проверка карточек в uinvestgroup, NORTHEA, satisofisi, cyprus-faq, realting.",
+        p2_f4: "<strong>Технический аудит сайта под LLM:</strong> микроразметка Schema.org (проекты, сданные корпуса) и доступность robots.txt.",
+        p2_f5: "<strong>Дорожная карта на 3 месяца:</strong> пошаговый план работ с конкретными приоритетами для вывода в Топ-3.",
+        p2_f6: "<strong>Презентационный отчет (15–20 стр. PDF) + 30-мин Zoom-созвон</strong> с выводами для руководства компании.",
+        p2_btn: "Заказать полный аудит и стратегию — €300",
+        p3_badge: "Сопровождение под ключ",
+        p3_time: "🔄 Ежемесячно",
+        p3_title: "GEO Strategy & Monthly Retainer",
+        p3_desc: "Мы выступаем архитекторами присутствия в ИИ: готовим ТЗ, контролируем внедрение и замеряем рост позиций.",
+        p3_type: "в месяц",
+        p3_f1: "<strong>Месячный спринт:</strong> 2–3 приоритетные задачи на месяц (Месяц 1: Schema.org; Месяц 2: Каталоги; Месяц 3: Отзывы).",
+        p3_f2: "<strong>Готовые ТЗ:</strong> готовый JSON-LD код микроразметки для IT и инструкции маркетологам по профилям на площадках.",
+        p3_f3: "<strong>Контроль качества (QC):</strong> проверка корректности залитых данных и их индексации роботами ИИ.",
+        p3_f4: "<strong>Ежемесячный контрольный замер:</strong> динамика «Было → Стало» (рост Share of Voice и частоты прямых рекомендаций).",
+        p3_f5: "<strong>Отчет динамики для руководства:</strong> наглядные метрики для собственников и директоров по маркетингу.",
+        p3_btn: "Запустить сопровождение — €500 / мес",
+        faq_title: "Часто задаваемые вопросы застройщиков",
+        faq_q1: "Почему покупатели ищут застройщиков через нейросети?",
+        faq_a1: "Обычная поисковая выдача перегружена рекламой брокеров и SEO-спамом. Покупатели элитной недвижимости задают вопросы ChatGPT и Perplexity, чтобы отсечь проблемные стройки и найти объекты с чистыми титулами.",
+        faq_q2: "Как быстро нейросети обновляют свои рекомендации?",
+        faq_a2: "Perplexity и ChatGPT Search используют живой веб-поиск. После обновления авторитетных источников и микроразметки на сайте первые изменения в выдаче заметны уже через 2–4 недели.",
+        faq_q3: "Можно ли доплатить с Express (€99) до полного аудита (€300)?",
+        faq_a3: "Да! Если в течение 14 дней после получения экспресс-отчета за €99 вы решите заказать полную дорожную карту, вы просто доплачиваете разницу (€201).",
+        faq_q4: "Сколько времени требуется от нашей команды при ежемесячном ведении?",
+        faq_a4: "Мы отдаем готовый код программисту и готовые тексты маркетологу. Трудозатраты вашей команды обычно не превышают 2 часов в месяц.",
+        ftr_back: "← Назад к рейтингу",
+        ord_badge: "Оформление заказа",
+        ord_title: "Заявка на AI-аудит",
+        ord_sub: "Оставьте контакты вашей компании, и наш ведущий аналитик свяжется с вами в течение 15 минут.",
+        lbl_sel_plan: "Выбранный тариф",
+        lbl_company: "Название компании / Бренда",
+        lbl_contact: "Контакт (Telegram @username, WhatsApp, Телефон)",
+        lbl_site: "Сайт или флагманский ЖК (опционально)",
+        btn_submit_order: "Отправить заявку на аудит",
+        ord_ok_txt: "Заявка принята! Мы свяжемся с вами в течение 15 минут."
+      },
+      tr: {
+        hdr_sub: "Yapay Zeka Görünürlüğü ve Denetimi",
+        btn_back: "← Sıralamaya Dön",
+        hero_badge: "Gayrimenkul için GEO / LLMO Optimizasyonu",
+        hero_title: 'Yapay Zeka Aramalarını <span class="grad-text">Doğrudan Satış Kanalına</span> Dönüştürün',
+        hero_desc: "Yatırımcılar ChatGPT, Perplexity veya Gemini'ye Kuzey Kıbrıs'ta nereden mülk alacaklarını sorduğunda yapay zeka sizi mi öneriyor yoksa rakiplerinize mi yönlendiriyor? Eksikleri tespit edin ve İlk 3'e girin.",
+        p1_badge: "Hızlı Teşhis",
+        p1_time: "⏱️ 24–48 saat",
+        p1_title: "AI Express Snapshot",
+        p1_desc: "Marka görünürlüğünüzün ve kritik engellerin hızlı ve bağımsız analizi.",
+        p1_type: "Tek seferlik hızlı denetim",
+        p1_f1: "<strong>10 Temel Soru Testi:</strong> ChatGPT ve Perplexity'de bölgesel yatırımcı soruları analizi.",
+        p1_f2: "<strong>Sıralama Tespiti:</strong> Markanızın öneri listesinde yer alıp almadığı ve konumu.",
+        p1_f3: "<strong>Engel Tespiti:</strong> Yapay zekanın olumsuz sinyal aldığı kaynakların doğrudan bağlantıları.",
+        p1_f4: "<strong>Yönetici Özeti (2–3 sayfa PDF):</strong> Ekran görüntüleri ve potansiyel müşteri kaybettiğiniz 3 kritik nokta.",
+        p1_btn: "Express Snapshot Sipariş Et — €99",
+        p2_star: "⭐ En Popüler / Kapsamlı Strateji",
+        p2_badge: "Tam İnceleme",
+        p2_time: "⏱️ 5–7 iş günü",
+        p2_title: "Full Visibility Audit & Roadmap",
+        p2_desc: "Kaynak analizi, rakip karşılaştırması, teknik web denetimi ve 90 günlük eylem planı.",
+        p2_type: "Tek seferlik derin denetim",
+        p2_f1: "<strong>25–30 Alıcı Senaryosu:</strong> ChatGPT Search, Perplexity Pro ve Gemini üzerinde matris testi.",
+        p2_f2: "<strong>Rakip Açığı Analizi:</strong> Yapay zekanın neden liderleri öne çıkardığının karşılaştırması.",
+        p2_f3: "<strong>Otorite Platform Denetimi:</strong> uinvestgroup, NORTHEA, satisofisi vb. listeleme kontrolleri.",
+        p2_f4: "<strong>Web Sitesi Teknik LLM Denetimi:</strong> Robots.txt ve Schema.org proje mikro veri kontrolü.",
+        p2_f5: "<strong>3 Aylık Yol Haritası:</strong> İlk 3'e çıkmak için önceliklendirilmiş somut eylem planı.",
+        p2_f6: "<strong>Sunum Raporu (15–20 sayfa PDF) + 30 dk Zoom</strong> yönetici brifingi.",
+        p2_btn: "Kapsamlı Denetim Sipariş Et — €300",
+        p3_badge: "Anahtar Teslim Danışmanlık",
+        p3_time: "🔄 Aylık Sürekli",
+        p3_title: "GEO Strategy & Monthly Retainer",
+        p3_desc: "Yapay zeka varlığınızın mimarı olarak çalışıyor, teknik şartnameleri hazırlıyor ve sonuçları denetliyoruz.",
+        p3_type: "aylık",
+        p3_f1: "<strong>Aylık Eylem Sprinti:</strong> Her ay 2–3 öncelikli hedef (Schema.org, Dizinler, Yorumlar).",
+        p3_f2: "<strong>Hazır Teknik Şartnameler:</strong> Yazılım ekibiniz için hazır JSON-LD kodları ve pazarlama yönergeleri.",
+        p3_f3: "<strong>Kalite Kontrolü:</strong> Verilerin yapay zeka botları tarafından doğru indekslenmesinin denetimi.",
+        p3_f4: "<strong>Aylık Karşılaştırmalı Ölçüm:</strong> Görünürlük payının ve öneri oranının 'Önce/Sonra' takibi.",
+        p3_f5: "<strong>Yönetim Raporu:</strong> Şirket yöneticileri için somut gelişim tablosu.",
+        p3_btn: "Aylık Danışmanlığı Başlat — €500 / ay",
+        faq_title: "Geliştiriciler İçin Sıkça Sorulan Sorular",
+        faq_q1: "Yatırımcılar neden yapay zekayı kullanıyor?",
+        faq_a1: "Geleneksel arama motorları reklam ve komisyoncu spamlarıyla doludur. Nitelikli alıcılar güvenli projeleri bulmak için doğrudan ChatGPT ve Perplexity'ye danışmaktadır.",
+        faq_q2: "Yapay zeka önerilerini ne kadar sürede günceller?",
+        faq_a2: "Otorite platformlar ve mikro veriler güncellendikten sonra sonuçlardaki ilk olumlu değişimler 2–4 hafta içinde görülür.",
+        faq_q3: "€99'dan €300'lük plana yükseltme yapılabilir mi?",
+        faq_a3: "Evet, 14 gün içinde sadece aradaki farkı (€201) ödeyerek tam plana geçebilirsiniz.",
+        faq_q4: "Aylık danışmanlıkta ekibimizden ne kadar zaman gerekir?",
+        faq_a4: "Tüm teknik kodları ve içerik yönergelerini hazır teslim ediyoruz. Ekibinizin aylık iş yükü 2 saati geçmez.",
+        ftr_back: "← Sıralamaya Dön",
+        ord_badge: "Hizmet Siparişi",
+        ord_title: "Yapay Zeka Denetimi Talep Edin",
+        ord_sub: "İletişim bilgilerinizi bırakın, uzmanımız 15 dakika içinde sizinle iletişime geçsin.",
+        lbl_sel_plan: "Seçilen Plan",
+        lbl_company: "Şirket / Marka Adı",
+        lbl_contact: "İletişim (Telegram, WhatsApp, Telefon)",
+        lbl_site: "Web Sitesi / Proje (İsteğe Bağlı)",
+        btn_submit_order: "Denetim Talebini Gönder",
+        ord_ok_txt: "Talebiniz alındı! Uzmanımız kısa süre içinde sizinle iletişime geçecektir."
+      }
+    };
+
+    let currentLang = localStorage.getItem('geoestate_lang_v2') || localStorage.getItem('geoestate_lang') || 'en';
+
+    function setLang(lang) {
+      if (!I18N[lang]) lang = 'en';
+      currentLang = lang;
+      localStorage.setItem('geoestate_lang_v2', lang);
+      localStorage.setItem('geoestate_lang', lang);
+
+      // Buttons styling
+      ['ru', 'en', 'tr'].forEach(l => {
+        const btn = document.getElementById('lang-' + l);
+        if (btn) {
+          if (l === lang) {
+            btn.className = 'px-2 py-1 rounded-lg bg-blue-600 text-white transition';
+          } else {
+            btn.className = 'px-2 py-1 rounded-lg text-slate-400 hover:text-white transition';
+          }
+        }
+      });
+
+      // Update text
+      const dict = I18N[lang];
+      const setText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
+      const setHtml = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
+
+      setText('hdr-sub', dict.hdr_sub);
+      setText('btn-back', dict.btn_back);
+      setText('hero-badge', dict.hero_badge);
+      setHtml('hero-title', dict.hero_title);
+      setText('hero-desc', dict.hero_desc);
+
+      setText('p1-badge', dict.p1_badge);
+      setText('p1-time', dict.p1_time);
+      setText('p1-title', dict.p1_title);
+      setText('p1-desc', dict.p1_desc);
+      setText('p1-type', dict.p1_type);
+      setHtml('p1-f1', dict.p1_f1);
+      setHtml('p1-f2', dict.p1_f2);
+      setHtml('p1-f3', dict.p1_f3);
+      setHtml('p1-f4', dict.p1_f4);
+      setText('p1-btn', dict.p1_btn);
+
+      setText('p2-star', dict.p2_star);
+      setText('p2-badge', dict.p2_badge);
+      setText('p2-time', dict.p2_time);
+      setText('p2-title', dict.p2_title);
+      setText('p2-desc', dict.p2_desc);
+      setText('p2-type', dict.p2_type);
+      setHtml('p2-f1', dict.p2_f1);
+      setHtml('p2-f2', dict.p2_f2);
+      setHtml('p2-f3', dict.p2_f3);
+      setHtml('p2-f4', dict.p2_f4);
+      setHtml('p2-f5', dict.p2_f5);
+      setHtml('p2-f6', dict.p2_f6);
+      setText('p2-btn', dict.p2_btn);
+
+      setText('p3-badge', dict.p3_badge);
+      setText('p3-time', dict.p3_time);
+      setText('p3-title', dict.p3_title);
+      setText('p3-desc', dict.p3_desc);
+      setText('p3-type', dict.p3_type);
+      setHtml('p3-f1', dict.p3_f1);
+      setHtml('p3-f2', dict.p3_f2);
+      setHtml('p3-f3', dict.p3_f3);
+      setHtml('p3-f4', dict.p3_f4);
+      setHtml('p3-f5', dict.p3_f5);
+      setText('p3-btn', dict.p3_btn);
+
+      setText('faq-title', dict.faq_title);
+      setText('faq-q1', dict.faq_q1);
+      setText('faq-a1', dict.faq_a1);
+      setText('faq-q2', dict.faq_q2);
+      setText('faq-a2', dict.faq_a2);
+      setText('faq-q3', dict.faq_q3);
+      setText('faq-a3', dict.faq_a3);
+      setText('faq-q4', dict.faq_q4);
+      setText('faq-a4', dict.faq_a4);
+
+      setText('ftr-back', dict.ftr_back);
+      setText('ord-badge', dict.ord_badge);
+      setText('ord-title', dict.ord_title);
+      setText('ord-sub', dict.ord_sub);
+      setText('lbl-sel-plan', dict.lbl_sel_plan);
+      setText('lbl-company', dict.lbl_company);
+      setText('lbl-contact', dict.lbl_contact);
+      setText('lbl-site', dict.lbl_site);
+      setText('btn-submit-order', dict.btn_submit_order);
+      setText('ord-ok-txt', dict.ord_ok_txt);
+    }
+
+    window.onload = function() {
+      setLang(currentLang);
+    };
+  </script>
+</body>
+</html>

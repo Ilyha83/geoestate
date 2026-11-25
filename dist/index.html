@@ -199,7 +199,7 @@
           <span class="w-[6px] h-[6px] rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400/50"></span>
           <span class="text-slate-400"><span id="lbl-date">Данные:</span> <strong class="text-slate-200 font-mono" id="header-date">Nov 2026</strong></span>
         </div>
-        <a href="#b2b" id="btn-dev" class="text-[11px] font-semibold px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white transition shadow-md shadow-blue-600/20 hover:shadow-blue-500/30">
+        <a href="audit.html" id="btn-dev" class="text-[11px] font-semibold px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white transition shadow-md shadow-blue-600/20 hover:shadow-blue-500/30">
           Застройщикам (Аудит)
         </a>
       </div>
@@ -383,14 +383,11 @@
         <span id="b2b-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-[10px] font-bold mb-4 border border-purple-500/15 uppercase tracking-wider">⚡ Для девелоперов и агентств</span>
         <h3 id="b2b-title" class="text-xl font-bold text-white mb-2">Вы представитель застройщика?</h3>
         <p id="b2b-desc" class="text-[11px] text-slate-400 leading-relaxed mb-5">Если ваш бренд пессимизируется в ChatGPT или не входит в Топ-3 ответов — вы теряете до 40% прямых клиентов. Закажите комплексную оптимизацию присутствия в LLM (GEO).</p>
-        <form onsubmit="handleB2B(event)" class="flex gap-2">
-          <input id="b2b-in" type="text" placeholder="Название компании + Контакт" required class="flex-1 bg-surface-800 border border-white/[0.06] text-[11px] rounded-xl px-3.5 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-purple-500/50 transition-colors">
-          <button type="submit" id="b2b-btn" class="px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white text-[11px] font-bold rounded-xl transition shadow-lg shadow-purple-600/20 whitespace-nowrap">Заказать GEO-аудит</button>
-        </form>
-        <p id="b2b-ok" class="text-[11px] text-emerald-400 mt-2 hidden flex items-center gap-1.5">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-          <span id="b2b-ok-txt">Запрос принят. Подготовим аналитический аудит видимости.</span>
-        </p>
+        <div class="mt-4">
+          <a href="audit.html" id="b2b-btn" class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold rounded-xl transition shadow-lg shadow-purple-600/20 whitespace-nowrap">
+            Заказать GEO-аудит (Тарифы) →
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -544,7 +541,7 @@
         b2b_title: "Вы представитель застройщика?",
         b2b_desc: "Если ваш бренд пессимизируется в ChatGPT или не входит в Топ-3 ответов — вы теряете до 40% прямых клиентов. Закажите комплексную оптимизацию присутствия в LLM (GEO).",
         b2b_ph: "Название компании + Контакт",
-        b2b_btn: "Заказать GEO-аудит",
+        b2b_btn: "Заказать GEO-аудит (Тарифы) →",
         b2b_ok: "Запрос принят. Подготовим аналитический аудит видимости.",
         md_sov_lbl: "Видимость",
         md_rec_lbl: "Рекомендации",
@@ -608,7 +605,7 @@
         b2b_title: "Are you a developer representative?",
         b2b_desc: "If your brand is penalized in ChatGPT or omitted from Top-3 answers, you lose up to 40% of direct clients. Request an advanced LLM presence audit (GEO).",
         b2b_ph: "Company Name + Contact",
-        b2b_btn: "Request GEO Audit",
+        b2b_btn: "Order GEO Audit (Plans) →",
         b2b_ok: "Request received. We will prepare an in-depth visibility audit.",
         md_sov_lbl: "Visibility",
         md_rec_lbl: "Recommendations",
@@ -672,7 +669,7 @@
         b2b_title: "Geliştirici temsilcisi misiniz?",
         b2b_desc: "Markanız ChatGPT'de cezalandırılıyor veya İlk 3'te çıkmıyorsa, doğrudan alıcıların %40'ını kaybediyorsunuz demektir. Kapsamlı LLM optimizasyonu (GEO) talep edin.",
         b2b_ph: "Şirket Adı + İletişim",
-        b2b_btn: "GEO Denetimi İste",
+        b2b_btn: "GEO Denetim Siparişi (Planlar) →",
         b2b_ok: "Talebiniz alındı. Görünürlük denetiminizi hazırlayacağız.",
         md_sov_lbl: "Görünürlük",
         md_rec_lbl: "Öneriler",
