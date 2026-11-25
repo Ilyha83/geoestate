@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -191,8 +191,8 @@
       <div class="flex items-center gap-3">
         <!-- Language Switcher -->
         <div class="flex items-center gap-0.5 bento-sm p-1 rounded-xl text-[10px] font-bold">
-          <button id="lang-ru" onclick="setLang('ru')" class="px-2 py-1 rounded-lg bg-blue-600 text-white transition">RU</button>
-          <button id="lang-en" onclick="setLang('en')" class="px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">EN</button>
+          <button id="lang-ru" onclick="setLang('ru')" class="px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">RU</button>
+          <button id="lang-en" onclick="setLang('en')" class="px-2 py-1 rounded-lg bg-blue-600 text-white transition">EN</button>
           <button id="lang-tr" onclick="setLang('tr')" class="px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">TR</button>
         </div>
         <div class="hidden md:flex items-center gap-2 text-[11px] bento-sm px-3 py-1.5 rounded-xl">
@@ -688,16 +688,22 @@
       }
     };
 
-    let currentLang = localStorage.getItem('geoestate_lang') || 'ru';
+    let currentLang = localStorage.getItem('geoestate_lang_v2') || 'en';
+    if (!localStorage.getItem('geoestate_lang_v2')) {
+      currentLang = 'en';
+      localStorage.setItem('geoestate_lang_v2', 'en');
+      localStorage.setItem('geoestate_lang', 'en');
+    }
 
     function t(key) {
-      const dict = I18N[currentLang] || I18N.ru;
+      const dict = I18N[currentLang] || I18N.en;
       return dict[key] || key;
     }
 
     function setLang(lang) {
-      if (!I18N[lang]) lang = 'ru';
+      if (!I18N[lang]) lang = 'en';
       currentLang = lang;
+      localStorage.setItem('geoestate_lang_v2', lang);
       localStorage.setItem('geoestate_lang', lang);
 
       // Update button styling
@@ -1028,8 +1034,8 @@
                 <span style="font-size:9px;font-weight:900;color:#fff;padding:2px 6px;border-radius:6px;background:linear-gradient(135deg,${sc>=75?'#059669,#10B981':sc>=45?'#D97706,#FBBF24':'#DC2626,#F87171'})">${g.label}</span>
               </div>
               <div style="font-size:15px;font-weight:800;color:#fff;margin-bottom:4px;">${proj.name}</div>
-              <div style="font-size:13px;font-weight:800;color:#10B981;font-family:'JetBrains Mono',monospace;margin-bottom:12px;">Старт: ${proj.price_from}</div>
-              <button onclick="openProj('${proj.id}')" style="width:100%;padding:8px;background:linear-gradient(135deg,#2563EB,#4F46E5);color:#fff;border:none;border-radius:12px;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 12px rgba(37,99,235,0.3);" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">Запросить презентацию →</button>
+              <div style="font-size:13px;font-weight:800;color:#10B981;font-family:'JetBrains Mono',monospace;margin-bottom:12px;">${t('card_price_from')}: ${proj.price_from}</div>
+              <button onclick="openProj('${proj.id}')" style="width:100%;padding:8px;background:linear-gradient(135deg,#2563EB,#4F46E5);color:#fff;border:none;border-radius:12px;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 12px rgba(37,99,235,0.3);" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">${t('card_pres')}</button>
             </div>
           `;
           L.marker(coords, { icon }).addTo(markersLayer).bindPopup(popup, { maxWidth: 300 });
